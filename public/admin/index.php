@@ -1,137 +1,159 @@
-<?php include 'includes/header.php'; ?>
-<?php
-// Config
-$config_path_local = __DIR__ . '/../config/database.php';
-if (file_exists($config_path_local)) {
-    require_once $config_path_local;
-} else {
+/**
+ * Admin Dashboard Overview
+ * 
+ * Path: public/admin/index.php
+ * Part of: Maharaja Supermarket Administration
+ */
+require_admin_login();
+
+// Database Connection
+if (file_exists(__DIR__ . '/../../config/database.php')) {
     require_once __DIR__ . '/../../config/database.php';
+} elseif (file_exists(__DIR__ . '/../config/database.php')) {
+    require_once __DIR__ . '/../config/database.php';
+} else {
+    die("Database configuration not found.");
 }
 
-// Fetch Stats
-$product_count = mysqli_fetch_assoc(mysqli_query($link, "SELECT COUNT(*) as count FROM products"))['count'];
-$order_count_res = mysqli_query($link, "SELECT COUNT(*) as count FROM orders");
-$order_count = $order_count_res ? mysqli_fetch_assoc($order_count_res)['count'] : 0;
-// Assuming we have orders table. If not, 0.
+$page_title = 'Dashboard Overview';
 
-// Recent products
-$recent_products = mysqli_query($link, "SELECT * FROM products ORDER BY created_at DESC LIMIT 5");
+// --- Analytics Calculations ---
+
+// 1. Orders Stats
+$stats = [
+    'today' => ['orders' => 0, 'revenue' => 0],
+    'week' => ['orders' => 0, 'revenue' => 0],
+    'month' => ['orders' => 0, 'revenue' => 0]
+];
+
+// Today
+$res = mysqli_query($link, "SELECT COUNT(id) as cnt, SUM(total_amount) as rev FROM orders WHERE DATE(created_at) = CURDATE() AND status != 'cancelled'");
+$row = mysqli_fetch_assoc($res);
+$stats['today']['orders'] = $row['cnt'] ?? 0;
+$stats['today']['revenue'] = $row['rev'] ?? 0;
+
+// This Week
+$res = mysqli_query($link, "SELECT COUNT(id) as cnt, SUM(total_amount) as rev FROM orders WHERE YEARWEEK(created_at, 1) = YEARWEEK(CURDATE(), 1) AND status != 'cancelled'");
+$row = mysqli_fetch_assoc($res);
+$stats['week']['orders'] = $row['cnt'] ?? 0;
+$stats['week']['revenue'] = $row['rev'] ?? 0;
+
+// This Month
+$res = mysqli_query($link, "SELECT COUNT(id) as cnt, SUM(total_amount) as rev FROM orders WHERE MONTH(created_at) = MONTH(CURDATE()) AND YEAR(created_at) = YEAR(CURDATE()) AND status != 'cancelled'");
+$row = mysqli_fetch_assoc($res);
+$stats['month']['orders'] = $row['cnt'] ?? 0;
+$stats['month']['revenue'] = $row['rev'] ?? 0;
+
+// 2. Low Stock Alerts (Stock < 5)
+$low_stock_items = [];
+$res = mysqli_query($link, "SELECT id, title_en, stock FROM products WHERE stock < 5 ORDER BY stock ASC LIMIT 10");
+while ($row = mysqli_fetch_assoc($res)) {
+    $low_stock_items[] = $row;
+}
+
+// 3. Recent Orders
+$recent_orders = [];
+$res = mysqli_query($link, "SELECT * FROM orders ORDER BY created_at DESC LIMIT 10");
+while ($row = mysqli_fetch_assoc($res)) {
+    $recent_orders[] = $row;
+}
+
+include 'includes/header.php';
 ?>
 
-<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-    <h1 class="h2">Dashboard</h1>
-</div>
-
-<div class="row">
-    <div class="col-md-4 mb-4">
-        <div class="card card-stats bg-primary text-white h-100">
-            <div class="card-body">
-                <div class="d-flex justify-content-between align-items-center">
-                    <div>
-                        <h6 class="card-title">Total Products</h6>
-                        <h2 class="mb-0">
-                            <?php echo $product_count; ?>
-                        </h2>
-                    </div>
-                    <div>
-                        <i class="fas fa-box fa-3x opacity-50"></i>
-                    </div>
-                </div>
-            </div>
-            <div class="card-footer d-flex align-items-center justify-content-between border-0 bg-primary-subtle">
-                <a href="products.php" class="text-white text-decoration-none stretched-link">View All</a>
-                <i class="fas fa-angle-right text-white"></i>
-            </div>
-        </div>
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="label">Today's Orders</div>
+        <div class="value"><?php echo $stats['today']['orders']; ?></div>
+        <div class="trend up"><i class="fas fa-chart-line"></i> Today</div>
     </div>
-
-    <div class="col-md-4 mb-4">
-        <div class="card card-stats bg-success text-white h-100">
-            <div class="card-body">
-                <div class="d-flex justify-content-between align-items-center">
-                    <div>
-                        <h6 class="card-title">Total Orders</h6>
-                        <h2 class="mb-0">
-                            <?php echo $order_count; ?>
-                        </h2>
-                    </div>
-                    <div>
-                        <i class="fas fa-shopping-cart fa-3x opacity-50"></i>
-                    </div>
-                </div>
-            </div>
-            <div class="card-footer d-flex align-items-center justify-content-between border-0 bg-success-subtle">
-                <a href="orders.php" class="text-white text-decoration-none stretched-link">View Orders</a>
-                <i class="fas fa-angle-right text-white"></i>
-            </div>
-        </div>
+    <div class="stat-card">
+        <div class="label">Today's Revenue</div>
+        <div class="value"><?php echo number_format($stats['today']['revenue'], 2); ?> <span style="font-size: 14px;">RON</span></div>
+        <div class="trend up"><i class="fas fa-coins"></i> Today</div>
     </div>
-
-    <div class="col-md-4 mb-4">
-        <div class="card card-stats bg-warning text-dark h-100">
-            <div class="card-body">
-                <div class="d-flex justify-content-between align-items-center">
-                    <div>
-                        <h6 class="card-title">Quick Actions</h6>
-                        <div class="d-grid gap-2 mt-2">
-                            <a href="product_form.php" class="btn btn-light btn-sm">Add New Product</a>
-                        </div>
-                    </div>
-                    <div>
-                        <i class="fas fa-bolt fa-3x opacity-50"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <div class="stat-card">
+        <div class="label">This Week</div>
+        <div class="value"><?php echo $stats['week']['orders']; ?> <span style="font-size: 14px; color: #6b7280; font-weight: 500;">Orders</span></div>
+        <div class="trend up"><i class="fas fa-calendar-week"></i> 7 Days</div>
+    </div>
+    <div class="stat-card">
+        <div class="label">This Month</div>
+        <div class="value"><?php echo number_format($stats['month']['revenue'], 2); ?> <span style="font-size: 14px;">RON</span></div>
+        <div class="trend up"><i class="fas fa-calendar-alt"></i> 30 Days</div>
     </div>
 </div>
 
-<h3 class="mt-4">Recently Added Products</h3>
-<div class="table-responsive">
-    <table class="table table-striped table-hover">
-        <thead>
-            <tr>
-                <th>Image</th>
-                <th>Title</th>
-                <th>Price</th>
-                <th>Category</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php if ($recent_products && mysqli_num_rows($recent_products) > 0): ?>
-                <?php while ($row = mysqli_fetch_assoc($recent_products)):
-                    $img_src = !empty($row['image']) ? '../uploads/' . $row['image'] : 'https://placehold.co/50x50';
-                    ?>
+<div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem;">
+    <!-- Recent Orders -->
+    <div class="card">
+        <div class="card-header">
+            <h3>Recent Orders</h3>
+            <a href="#" class="btn-view">View All</a>
+        </div>
+        <div class="table-responsive">
+            <table>
+                <thead>
                     <tr>
-                        <td><img src="<?php echo htmlspecialchars($img_src); ?>" alt="img" width="50" height="50"
-                                style="object-fit:cover;"></td>
-                        <td>
-                            <?php echo htmlspecialchars($row['title']); ?>
-                        </td>
-                        <td>
-                            <?php echo number_format($row['price'], 2); ?> RON
-                        </td>
-                        <td>
-                            <?php
-                            // Quick category lookup directly or join in query
-                            // For simplicity in dashboard, showing ID or assuming fetch
-                            echo $row['category_id'];
-                            ?>
-                        </td>
-                        <td>
-                            <a href="product_form.php?id=<?php echo $row['id']; ?>"
-                                class="btn btn-sm btn-outline-primary">Edit</a>
-                        </td>
+                        <th>Order ID</th>
+                        <th>Customer</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                        <th>Date</th>
                     </tr>
-                <?php endwhile; ?>
-            <?php else: ?>
-                <tr>
-                    <td colspan="5">No products found.</td>
-                </tr>
-            <?php endif; ?>
-        </tbody>
-    </table>
+                </thead>
+                <tbody>
+                    <?php if (empty($recent_orders)): ?>
+                        <tr><td colspan="5" style="text-align:center;">No orders found.</td></tr>
+                    <?php else: ?>
+                        <?php foreach ($recent_orders as $order): ?>
+                        <tr>
+                            <td><strong>#<?php echo $order['id']; ?></strong></td>
+                            <td><?php echo htmlspecialchars($order['name']); ?></td>
+                            <td><?php echo number_format($order['total_amount'], 2); ?> RON</td>
+                            <td>
+                                <span class="badge badge-<?php echo strtolower($order['status']); ?>">
+                                    <?php echo ucfirst($order['status']); ?>
+                                </span>
+                            </td>
+                            <td><?php echo date('d M, H:i', strtotime($order['created_at'])); ?></td>
+                        </tr>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Low Stock Alerts -->
+    <div class="card">
+        <div class="card-header">
+            <h3>Low Stock Alerts</h3>
+            <span class="badge badge-low-stock"><?php echo count($low_stock_items); ?> Items</span>
+        </div>
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Stock</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php if (empty($low_stock_items)): ?>
+                        <tr><td colspan="2" style="text-align:center; padding: 2rem; color: #6b7280;">Inventory is healthy.</td></tr>
+                    <?php else: ?>
+                        <?php foreach ($low_stock_items as $item): ?>
+                        <tr>
+                            <td style="font-weight: 500;"><?php echo htmlspecialchars($item['title_en']); ?></td>
+                            <td><span style="color: #ef4444; font-weight: 700;"><?php echo $item['stock']; ?></span></td>
+                        </tr>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
 
 <?php include 'includes/footer.php'; ?>

@@ -1,7 +1,21 @@
-<?php
+/**
+ * Stripe Payment Gateway Integration Helpers
+ * 
+ * Path: api/stripe_helpers.php
+ * Part of: Maharaja Supermarket API
+ */
 require_once __DIR__ . '/../config/app.php';
 require_once __DIR__ . '/../config/stripe.php';
 
+/**
+ * Execute a request to the Stripe API using cURL
+ * 
+ * @param string $method HTTP method (GET, POST, etc.)
+ * @param string $endpoint Stripe API endpoint
+ * @param array $params Request parameters
+ * @throws Exception If request fails or Stripe returns an error
+ * @return array Decoded JSON response
+ */
 function stripe_api_request($method, $endpoint, $params)
 {
     if (!STRIPE_SECRET_KEY) {
@@ -42,6 +56,15 @@ function stripe_api_request($method, $endpoint, $params)
     return $data;
 }
 
+/**
+ * Initialize a new Stripe Checkout Session for an order
+ * 
+ * @param int $order_id Internal order ID
+ * @param array $line_items List of items to charge for
+ * @param string $success_url Redirect URL on success
+ * @param string $cancel_url Redirect URL on cancellation
+ * @return array Session data from Stripe
+ */
 function stripe_create_checkout_session($order_id, $line_items, $success_url, $cancel_url)
 {
     $params = [
@@ -62,6 +85,14 @@ function stripe_create_checkout_session($order_id, $line_items, $success_url, $c
     return stripe_api_request('POST', '/v1/checkout/sessions', $params);
 }
 
+/**
+ * Verify the signature of a Stripe Webhook payload
+ * 
+ * @param string $payload Raw request body
+ * @param string $sig_header Stripe-Signature header
+ * @param string $secret Webhook signing secret
+ * @return bool
+ */
 function stripe_verify_signature($payload, $sig_header, $secret)
 {
     if (!$secret) {

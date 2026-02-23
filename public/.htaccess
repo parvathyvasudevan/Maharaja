@@ -1,0 +1,15 @@
+Options -Indexes
+RewriteEngine On
+
+# ── Legacy static HTML → PHP redirects ───────────────────────────────────────
+# The site was originally a Shopify export with .html files.
+# These redirect to the live PHP equivalents instead of showing 404.
+
+Redirect 301 /ro.html      /lang_switch.php?lang=ro&back=/
+Redirect 301 /index.html   /
+Redirect 301 /about.html   /
+Redirect 301 /contact.html /contact.php
+Redirect 301 /terms.html   /
+
+# ── Ensure PHP files are served correctly ─────────────────────────────────────
+DirectoryIndex index.php index.html

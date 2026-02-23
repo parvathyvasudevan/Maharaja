@@ -1,15 +1,18 @@
-<?php
-session_start();
+/**
+ * Home Page
+ * 
+ * Path: public/index.php
+ * Part of: Maharaja Supermarket
+ */
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
-$config_path = __DIR__ . '/../config/database.php';
-$config_path_local = __DIR__ . '/config/database.php';
-if (file_exists($config_path_local)) {
-  require_once $config_path_local;
-} else {
-  require_once $config_path;
-}
+
+// Database connection ($link)
+require_once __DIR__ . '/../config/database.php';
+
+// Bilingual support
+require_once __DIR__ . '/../includes/init_lang.php';
 ?>
 <!DOCTYPE html>
 <html class="js" lang="en">
@@ -108,7 +111,7 @@ if (file_exists($config_path_local)) {
       text-align: left !important;
       padding: 10px 35px 10px 15px;
       width: 100%;
-      background: url(https://maharajasupermarket.ro/cdn/shop/t/4/assets/arrow-chevron.svg) no-repeat;
+      background: url(/cdn/shop/t/4/assets/arrow-chevron.svg) no-repeat;
       background-size: 7px;
       background-position: calc(100% - 15px) 50%
     }
@@ -358,7 +361,7 @@ if (file_exists($config_path_local)) {
       text-align: left !important;
       padding: 10px 35px 10px 15px;
       width: 100%;
-      background: url(https://maharajasupermarket.ro/cdn/shop/t/6/assets/arrow-chevron.svg) no-repeat;
+      background: url(/cdn/shop/t/6/assets/arrow-chevron.svg) no-repeat;
       background-size: 7px;
       background-position: calc(100% - 15px) 50%
     }
@@ -1874,9 +1877,9 @@ if (file_exists($config_path_local)) {
   <!-- End Thunder Critical CSS --->
   <!-- Thunder JS Deferral --->
   <script type="text/javascript" async=""
-    src="https://maharajasupermarket.ro/cdn/s/trekkie.storefront.8f32c7f0b513e73f3235c26245676203e1209161.min.js"></script>
+    src="/cdn/s/trekkie.storefront.8f32c7f0b513e73f3235c26245676203e1209161.min.js"></script>
   <script type="text/javascript" async=""
-    src="https://maharajasupermarket.ro/cdn/s/trekkie.storefront.8f32c7f0b513e73f3235c26245676203e1209161.min.js"></script>
+    src="/cdn/s/trekkie.storefront.8f32c7f0b513e73f3235c26245676203e1209161.min.js"></script>
   <script>
        c onst e = { t: [/pa ypalobjects /i, /klaviy o/ i, / w i sti a/ i], i: [] }, t = (t, c) = > t && (!e.t | | e.t.s ome((e => e.te st(t)))) && (!e.i || e.i.every((e => !e.t e st(t)))), c = document.createElement, r = { src: Object.getOwnPr opertyD escri ptor(HTMLScriptElement.prototype, "src"), type: Object.getOw nPropert yDescr iptor(HTMLScriptElement.prototype, "type"), defer: Object.ge tOwnProp er tyDescriptor(HTMLScrip t Element.protot y pe, "defer" ) }; document.createEl ement = function (...e) { if ("script " !== e[0].toLowerCase()) r e turn c.bind(document)(...e); co n st i = c.bind(d o cume nt)(...e); try { Object.defineP roperties(i, { src: { ...r.sr c, se t(e) { t(e, i.ty pe) & & r.defe r.set.call(this, "defer "), r.src.set.c al l(this, e) } }, type: { ...r.type, g et() { const e = r.type.get.cal l(this); return t(i.src, 0) && r.defer.set.call(t his, "defer"), e }, set(e) { r.t ype.se t.c a ll(this, e), t(i.s r c, i.type) && r.defer.set.call(this, "defer") } } }), i.set Att r ibute = function (e, t) { "type" === e || "src" === e ? i[e] = t : HTMLScriptE lement.proto type.setAttribute.call(i, e, t) } } catch (e) { console.warn("Thunder was unable to prevent script execution for script src ", i.src, ".\n", 'A likely cause   would be  because you are using a Shopify app or a third-party browser extension that monkey patches     the "document.createElement" function.') } return i };
   </script>
@@ -1889,7 +1892,7 @@ if (file_exists($config_path_local)) {
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="theme-color" content="">
-  <link rel="canonical" href="https://maharajasupermarket.ro/">
+  <link rel="canonical" href="/">
   <link rel="preconnect" href="https://cdn.shopify.com" crossorigin="">
   <meta name="theme-color" content="#6ea622">
   <link rel="icon" type="image/png"
@@ -1906,7 +1909,7 @@ if (file_exists($config_path_local)) {
 
 
   <meta property="og:site_name" content="Maharaja Supermarket">
-  <meta property="og:url" content="https://maharajasupermarket.ro/">
+  <meta property="og:url" content="/">
   <meta property="og:title" content="Online Indian grocery shopping in Romania - Maharaja Supermarket">
   <meta property="og:type" content="website">
   <meta property="og:description"
@@ -1944,7 +1947,7 @@ if (file_exists($config_path_local)) {
 
   <!-- Load deferred scripts -->
   <script src="global_v=83446935447870679591742289478.js" defer=""></script>
-  <script src="https://maharajasupermarket.ro/cdn/shopifycloud/storefront/assets/themes_support/api.jquery-7ab1a3a4.js"
+  <script src="/cdn/shopifycloud/storefront/assets/themes_support/api.jquery-7ab1a3a4.js"
     defer=""></script>
   <script src="countdown_v=1097705409581063121742289478.js" defer=""></script>
   <script src="cart-notification_v=21742545381121272691742289478.js" defer=""></script>
@@ -1958,9 +1961,9 @@ if (file_exists($config_path_local)) {
   <script>window.performance && window.performance.mark && window.performance.mark('shopify.content_for_header.start');</script>
   <meta name="facebook-domain-verification" content="oj0xj2os2kx72wk4lx67bh8dge0jhx">
   <meta id="shopify-digital-wallet" name="shopify-digital-wallet" content="/63657836700/digital_wallets/dialog">
-  <link rel="alternate" hreflang="x-default" href="https://maharajasupermarket.ro/">
-  <link rel="alternate" hreflang="ro" href="https://maharajasupermarket.ro/pl">
-  <script async="async" src="https://maharajasupermarket.ro/checkouts/internal/preloads_locale=en-PL.js"></script>
+  <link rel="alternate" hreflang="x-default" href="/">
+  <link rel="alternate" hreflang="ro" href="/pl">
+  <script async="async" src="/checkouts/internal/preloads_locale=en-PL.js"></script>
   <script id="shopify-features"
     type="application/json">{"accessToken":"d7c85eaf958663b3789361bac4cf2e0f","betas":["rich-media-storefront-analytics"],"domain":"maharajasupermarket.ro","predictiveSearch":true,"shopId":63657836700,"locale":"en"}</script>
   <script>var Shopify = Shopify || {};
@@ -1978,9 +1981,9 @@ if (file_exists($config_path_local)) {
   <script>!function (o) { function n() { var o = []; function n() { o.push(Array.prototype.slice.apply(arguments)) } return n.q = o, n } var t = o.Shopify = o.Shopify || {}; t.loadFeatures = n(), t.autoloadFeatures = n() }(window);</script>
   <script id="shop-js-analytics" type="application/json">{"pageType":"index"}</script>
   <script defer="defer" async="" type="module"
-    src="https://maharajasupermarket.ro/cdn/shopifycloud/shop-js/modules/v2/client.init-shop-cart-sync_DtuiiIyl.en.esm.js"></script>
+    src="/cdn/shopifycloud/shop-js/modules/v2/client.init-shop-cart-sync_DtuiiIyl.en.esm.js"></script>
   <script defer="defer" async="" type="module"
-    src="https://maharajasupermarket.ro/cdn/shopifycloud/shop-js/modules/v2/chunk.common_CUHEfi5Q.esm.js"></script>
+    src="/cdn/shopifycloud/shop-js/modules/v2/chunk.common_CUHEfi5Q.esm.js"></script>
   <script type="module">
     await import("//maharajasupermarket.ro/cdn/shopifycloud/shop-js/modules/v2/client.init-shop-cart-sync_DtuiiIyl.en.esm.js");
     await import("//maharajasupermarket.ro/cdn/shopifycloud/shop-js/modules/v2/chunk.common_CUHEfi5Q.esm.js");
@@ -1994,12 +1997,12 @@ if (file_exists($config_path_local)) {
   <script
     id="captcha-bootstrap">!function () { 'use strict'; const t = 'contact', e = 'account', n = 'new_comment', o = [[t, t], ['blogs', n], ['comments', n], [t, 'customer']], c = [[e, 'customer_login'], [e, 'guest_login'], [e, 'recover_customer_password'], [e, 'create_customer']], r = t => t.map((([t, e]) => `form[action*='/${t}']:not([data-nocaptcha='true']) input[name='form_type'][value='${e}']`)).join(','), a = t => () => t ? [...document.querySelectorAll(t)].map((t => t.form)) : []; function s() { const t = [...o], e = r(t); return a(e) } const i = 'password', u = 'form_key', d = ['recaptcha-v3-token', 'g-recaptcha-response', 'h-captcha-response', i], f = () => { try { return window.sessionStorage } catch { return } }, m = '__shopify_v', _ = t => t.elements[u]; function p(t, e, n = !1) { try { const o = window.sessionStorage, c = JSON.parse(o.getItem(e)), { data: r } = function (t) { const { data: e, action: n } = t; return t[m] || n ? { data: e, action: n } : { data: t, action: n } }(c); for (const [e, n] of Object.entries(r)) t.elements[e] && (t.elements[e].value = n); n && o.removeItem(e) } catch (o) { console.error('form repopulation failed', { error: o }) } } const l = 'form_type', E = 'cptcha'; function T(t) { t.dataset[E] = !0 } const w = window, h = w.document, L = 'Shopify', v = 'ce_forms', y = 'captcha'; let A = !1; ((t, e) => { const n = (g = 'f06e6c50-85a8-45c8-87d0-21a2b65856fe', I = 'https://cdn.shopify.com/shopifycloud/storefront-forms-hcaptcha/ce_storefront_forms_captcha_hcaptcha.v1.5.2.iife.js', D = { infoText: 'Protected by hCaptcha', privacyText: 'Privacy', termsText: 'Terms' }, (t, e, n) => { const o = w[L][v], c = o.bindForm; if (c) return c(t, g, e, D).then(n); var r; o.q.push([[t, g, e, D], n]), r = I, A || (h.body.append(Object.assign(h.createElement('script'), { id: 'captcha-provider', async: !0, src: r })), A = !0) }); var g, I, D; w[L] = w[L] || {}, w[L][v] = w[L][v] || {}, w[L][v].q = [], w[L][y] = w[L][y] || {}, w[L][y].protect = function (t, e) { n(t, void 0, e), T(t) }, Object.freeze(w[L][y]), function (t, e, n, w, h, L) { const [v, y, A, g] = function (t, e, n) { const i = e ? o : [], u = t ? c : [], d = [...i, ...u], f = r(d), m = r(i), _ = r(d.filter((([t, e]) => n.includes(e)))); return [a(f), a(m), a(_), s()] }(w, h, L), I = t => { const e = t.target; return e instanceof HTMLFormElement ? e : e && e.form }, D = t => v().includes(t); t.addEventListener('submit', (t => { const e = I(t); if (!e) return; const n = D(e) && !e.dataset.hcaptchaBound && !e.dataset.recaptchaBound, o = _(e), c = g().includes(e) && (!o || !o.value); (n || c) && t.preventDefault(), c && !n && (function (t) { try { if (!f()) return; !function (t) { const e = f(); if (!e) return; const n = _(t); if (!n) return; const o = n.value; o && e.removeItem(o) }(t); const e = Array.from(Array(32), (() => Math.random().toString(36)[2])).join(''); !function (t, e) { _(t) || t.append(Object.assign(document.createElement('input'), { type: 'hidden', name: u })), t.elements[u].value = e }(t, e), function (t, e) { const n = f(); if (!n) return; const o = [...t.querySelectorAll(`input[type='${i}']`)].map((({ name: t }) => t)), c = [...d, ...o], r = {}; for (const [a, s] of new FormData(t).entries()) c.includes(a) || (r[a] = s); n.setItem(e, JSON.stringify({ [m]: 1, action: t.action, data: r })) }(t, e) } catch (e) { console.error('failed to persist form', e) } }(e), e.submit()) })); const S = (t, e) => { t && !t.dataset[E] && (n(t, e.some((e => e === t))), T(t)) }; for (const o of ['focusin', 'change']) t.addEventListener(o, (t => { const e = I(t); D(e) && S(e, y()) })); const B = e.get('form_key'), M = e.get(l), P = B && M; t.addEventListener('DOMContentLoaded', (() => { const t = y(); if (P) for (const e of t) e.elements[l].value === M && p(e, B);[...new Set([...A(), ...v().filter((t => 'true' === t.dataset.shopifyCaptcha))])].forEach((e => S(e, t))) })) }(h, new URLSearchParams(w.location.search), n, t, e, ['guest_login']) })(!0, !0) }();</script>
   <script data-source-attribution="shopify.loadfeatures" defer="defer"
-    src="https://maharajasupermarket.ro/cdn/shopifycloud/storefront/assets/storefront/load_feature-a0a9edcb.js"
+    src="/cdn/shopifycloud/storefront/assets/storefront/load_feature-a0a9edcb.js"
     crossorigin="anonymous"></script>
   <script>
     fetch('/sf_private_access_tokens' + location.search).catch(() => { });
   </script>
-  <script data-source-attribution="shopify.dynamic_checkout.dynamic.init">var Shopify = Shopify || {}; Shopify.PaymentButton = Shopify.PaymentButton || { isStorefrontPortableWallets: !0, init: function () { window.Shopify.PaymentButton.init = function () { }; var t = document.createElement("script"); t.src = "https://maharajasupermarket.ro/cdn/shopifycloud/portable-wallets/latest/portable-wallets.en.js", t.type = "module", document.head.appendChild(t) } };
+  <script data-source-attribution="shopify.dynamic_checkout.dynamic.init">var Shopify = Shopify || {}; Shopify.PaymentButton = Shopify.PaymentButton || { isStorefrontPortableWallets: !0, init: function () { window.Shopify.PaymentButton.init = function () { }; var t = document.createElement("script"); t.src = "/cdn/shopifycloud/portable-wallets/latest/portable-wallets.en.js", t.type = "module", document.head.appendChild(t) } };
   </script>
   <script data-source-attribution="shopify.dynamic_checkout.buyer_consent">
     function portableWalletsHideBuyerConsent(e) { var t = document.getElementById("shopify-buyer-consent"), n = document.getElementById("shopify-subscription-policy-button"); t && n && (t.classList.add("hidden"), t.setAttribute("aria-hidden", "true"), n.removeEventListener("click", e)) } function portableWalletsShowBuyerConsent(e) { var t = document.getElementById("shopify-buyer-consent"), n = document.getElementById("shopify-subscription-policy-button"); t && n && (t.classList.remove("hidden"), t.removeAttribute("aria-hidden"), n.addEventListener("click", e)) } window.Shopify?.PaymentButton && (window.Shopify.PaymentButton.hideBuyerConsent = portableWalletsHideBuyerConsent, window.Shopify.PaymentButton.showBuyerConsent = portableWalletsShowBuyerConsent);
@@ -2064,7 +2067,7 @@ if (file_exists($config_path_local)) {
                     "@type": "SearchAction",
                     "target": {
                         "@type": "EntryPoint",
-                        "urlTemplate": "https://maharajasupermarket.ro/search?q={query}"
+                        "urlTemplate": "/search?q={query}"
                     },
                     "query-input": "required name=query"
                 }
@@ -2463,8 +2466,8 @@ if (file_exists($config_path_local)) {
   <link href="https://monorail-edge.shopifysvc.com" rel="dns-prefetch">
   <script>(function () { if ("sendBeacon" in navigator && "performance" in window) { try { var session_token_from_headers = performance.getEntriesByType('navigation')[0].serverTiming.find(x => x.name == '_s').description; } catch { var session_token_from_headers = undefined; } var session_cookie_matches = document.cookie.match(/_shopify_s=([^;]*)/); var session_token_from_cookie = session_cookie_matches && session_cookie_matches.length === 2 ? session_cookie_matches[1] : ""; var session_token = session_token_from_headers || session_token_from_cookie || ""; function handle_abandonment_event(e) { var entries = performance.getEntries().filter(function (entry) { return /monorail-edge.shopifysvc.com/.test(entry.name); }); if (!window.abandonment_tracked && entries.length === 0) { window.abandonment_tracked = true; var currentMs = Date.now(); var navigation_start = performance.timing.navigationStart; var payload = { shop_id: 63657836700, url: window.location.href, navigation_start, duration: currentMs - navigation_start, session_token, page_type: "index" }; window.navigator.sendBeacon("https://monorail-edge.shopifysvc.com/v1/produce", JSON.stringify({ schema_id: "online_store_buyer_site_abandonment/1.1", payload: payload, metadata: { event_created_at_ms: currentMs, event_sent_at_ms: currentMs } })); } } window.addEventListener('pagehide', handle_abandonment_event); } }());</script>
   <script
-    id="web-pixels-manager-setup">(function e(e, d, r, n, o) { if (void 0 === o && (o = {}), !Boolean(null === (a = null === (i = window.Shopify) || void 0 === i ? void 0 : i.analytics) || void 0 === a ? void 0 : a.replayQueue)) { var i, a; window.Shopify = window.Shopify || {}; var t = window.Shopify; t.analytics = t.analytics || {}; var s = t.analytics; s.replayQueue = [], s.publish = function (e, d, r) { return s.replayQueue.push([e, d, r]), !0 }; try { self.performance.mark("wpm:start") } catch (e) { } var l = function () { var e = { modern: /Edge?\/(1{2}[4-9]|1[2-9]\d|[2-9]\d{2}|\d{4,})\.\d+(\.\d+|)|Firefox\/(1{2}[4-9]|1[2-9]\d|[2-9]\d{2}|\d{4,})\.\d+(\.\d+|)|Chrom(ium|e)\/(9{2}|\d{3,})\.\d+(\.\d+|)|(Maci|X1{2}).+ Version\/(15\.\d+|(1[6-9]|[2-9]\d|\d{3,})\.\d+)([,.]\d+|)( \(\w+\)|)( Mobile\/\w+|) Safari\/|Chrome.+OPR\/(9{2}|\d{3,})\.\d+\.\d+|(CPU[ +]OS|iPhone[ +]OS|CPU[ +]iPhone|CPU IPhone OS|CPU iPad OS)[ +]+(15[._]\d+|(1[6-9]|[2-9]\d|\d{3,})[._]\d+)([._]\d+|)|Android:?[ /-](13[3-9]|1[4-9]\d|[2-9]\d{2}|\d{4,})(\.\d+|)(\.\d+|)|Android.+Firefox\/(13[5-9]|1[4-9]\d|[2-9]\d{2}|\d{4,})\.\d+(\.\d+|)|Android.+Chrom(ium|e)\/(13[3-9]|1[4-9]\d|[2-9]\d{2}|\d{4,})\.\d+(\.\d+|)|SamsungBrowser\/([2-9]\d|\d{3,})\.\d+/, legacy: /Edge?\/(1[6-9]|[2-9]\d|\d{3,})\.\d+(\.\d+|)|Firefox\/(5[4-9]|[6-9]\d|\d{3,})\.\d+(\.\d+|)|Chrom(ium|e)\/(5[1-9]|[6-9]\d|\d{3,})\.\d+(\.\d+|)([\d.]+$|.*Safari\/(?![\d.]+ Edge\/[\d.]+$))|(Maci|X1{2}).+ Version\/(10\.\d+|(1[1-9]|[2-9]\d|\d{3,})\.\d+)([,.]\d+|)( \(\w+\)|)( Mobile\/\w+|) Safari\/|Chrome.+OPR\/(3[89]|[4-9]\d|\d{3,})\.\d+\.\d+|(CPU[ +]OS|iPhone[ +]OS|CPU[ +]iPhone|CPU IPhone OS|CPU iPad OS)[ +]+(10[._]\d+|(1[1-9]|[2-9]\d|\d{3,})[._]\d+)([._]\d+|)|Android:?[ /-](13[3-9]|1[4-9]\d|[2-9]\d{2}|\d{4,})(\.\d+|)(\.\d+|)|Mobile Safari.+OPR\/([89]\d|\d{3,})\.\d+\.\d+|Android.+Firefox\/(13[5-9]|1[4-9]\d|[2-9]\d{2}|\d{4,})\.\d+(\.\d+|)|Android.+Chrom(ium|e)\/(13[3-9]|1[4-9]\d|[2-9]\d{2}|\d{4,})\.\d+(\.\d+|)|Android.+(UC? ?Browser|UCWEB|U3)[ /]?(15\.([5-9]|\d{2,})|(1[6-9]|[2-9]\d|\d{3,})\.\d+)\.\d+|SamsungBrowser\/(5\.\d+|([6-9]|\d{2,})\.\d+)|Android.+MQ{2}Browser\/(14(\.(9|\d{2,})|)|(1[5-9]|[2-9]\d|\d{3,})(\.\d+|))(\.\d+|)|K[Aa][Ii]OS\/(3\.\d+|([4-9]|\d{2,})\.\d+)(\.\d+|)/ }, d = e.modern, r = e.legacy, n = navigator.userAgent; return n.match(d) ? "modern" : n.match(r) ? "legacy" : "unknown" }(), u = "modern" === l ? "modern" : "legacy", c = (null != n ? n : { modern: "", legacy: "" })[u], f = function (e) { return [e.baseUrl, "/wpm", "/b", e.hashVersion, "modern" === e.buildTarget ? "m" : "l", ".js"].join("") }({ baseUrl: d, hashVersion: r, buildTarget: u }), m = function (e) { var d = e.version, r = e.bundleTarget, n = e.surface, o = e.pageUrl, i = e.monorailEndpoint; return { emit: function (e) { var a = e.status, t = e.errorMsg, s = (new Date).getTime(), l = JSON.stringify({ metadata: { event_sent_at_ms: s }, events: [{ schema_id: "web_pixels_manager_load/3.1", payload: { version: d, bundle_target: r, page_url: o, status: a, surface: n, error_msg: t }, metadata: { event_created_at_ms: s } }] }); if (!i) return console && console.warn && console.warn("[Web Pixels Manager] No Monorail endpoint provided, skipping logging."), !1; try { return self.navigator.sendBeacon.bind(self.navigator)(i, l) } catch (e) { } var u = new XMLHttpRequest; try { return u.open("POST", i, !0), u.setRequestHeader("Content-Type", "text/plain"), u.send(l), !0 } catch (e) { return console && console.warn && console.warn("[Web Pixels Manager] Got an unhandled error while logging to Monorail."), !1 } } } }({ version: r, bundleTarget: l, surface: e.surface, pageUrl: self.location.href, monorailEndpoint: e.monorailEndpoint }); try { o.browserTarget = l, function (e) { var d = e.src, r = e.async, n = void 0 === r || r, o = e.onload, i = e.onerror, a = e.sri, t = e.scriptDataAttributes, s = void 0 === t ? {} : t, l = document.createElement("script"), u = document.querySelector("head"), c = document.querySelector("body"); if (l.async = n, l.src = d, a && (l.integrity = a, l.crossOrigin = "anonymous"), s) for (var f in s) if (Object.prototype.hasOwnProperty.call(s, f)) try { l.dataset[f] = s[f] } catch (e) { } if (o && l.addEventListener("load", o), i && l.addEventListener("error", i), u) u.appendChild(l); else { if (!c) throw new Error("Did not find a head or body element to append the script"); c.appendChild(l) } }({ src: f, async: !0, onload: function () { if (!function () { var e, d; return Boolean(null === (d = null === (e = window.Shopify) || void 0 === e ? void 0 : e.analytics) || void 0 === d ? void 0 : d.initialized) }()) { var d = window.webPixelsManager.init(e) || void 0; if (d) { var r = window.Shopify.analytics; r.replayQueue.forEach((function (e) { var r = e[0], n = e[1], o = e[2]; d.publishCustomEvent(r, n, o) })), r.replayQueue = [], r.publish = d.publishCustomEvent, r.visitor = d.visitor, r.initialized = !0 } } }, onerror: function () { return m.emit({ status: "failed", errorMsg: "".concat(f, " has failed to load") }) }, sri: function (e) { var d = /^sha384-[A-Za-z0-9+/=]+$/; return "string" == typeof e && d.test(e) }(c) ? c : "", scriptDataAttributes: o }), m.emit({ status: "loading" }) } catch (e) { m.emit({ status: "failed", errorMsg: (null == e ? void 0 : e.message) || "Unknown error" }) } } })({ shopId: 63657836700, storefrontBaseUrl: "https://maharajasupermarket.ro", extensionsBaseUrl: "https://extensions.shopifycdn.com/cdn/shopifycloud/web-pixels-manager", monorailEndpoint: "https://monorail-edge.shopifysvc.com/unstable/produce_batch", surface: "storefront-renderer", enabledBetaFlags: ["2dca8a86", "a0d5f9d2"], webPixelsConfigList: [{ "id": "1055391900", "configuration": "{\"webPixelName\":\"Judge.me\"}", "eventPayloadVersion": "v1", "runtimeContext": "STRICT", "scriptVersion": "34ad157958823915625854214640f0bf", "type": "APP", "apiClientId": 683015, "privacyPurposes": ["ANALYTICS"], "dataSharingAdjustments": { "protectedCustomerApprovalScopes": ["read_customer_email", "read_customer_name", "read_customer_personal_data", "read_customer_phone"] } }, { "id": "617119900", "configuration": "{\"pixel_id\":\"422866954167895\",\"pixel_type\":\"facebook_pixel\"}", "eventPayloadVersion": "v1", "runtimeContext": "OPEN", "scriptVersion": "ca16bc87fe92b6042fbaa3acc2fbdaa6", "type": "APP", "apiClientId": 2329312, "privacyPurposes": ["ANALYTICS", "MARKETING", "SALE_OF_DATA"], "dataSharingAdjustments": { "protectedCustomerApprovalScopes": ["read_customer_address", "read_customer_email", "read_customer_name", "read_customer_personal_data", "read_customer_phone"] } }, { "id": "564789404", "configuration": "{\"config\":\"{\\\"google_tag_ids\\\":[\\\"G-QT89TM8J0K\\\",\\\"GT-K8GX9H7D\\\"],\\\"target_country\\\":\\\"ZZ\\\",\\\"gtag_events\\\":[{\\\"type\\\":\\\"search\\\",\\\"action_label\\\":\\\"G-QT89TM8J0K\\\"},{\\\"type\\\":\\\"begin_checkout\\\",\\\"action_label\\\":\\\"G-QT89TM8J0K\\\"},{\\\"type\\\":\\\"view_item\\\",\\\"action_label\\\":[\\\"G-QT89TM8J0K\\\",\\\"MC-0622R69ZJ6\\\"]},{\\\"type\\\":\\\"purchase\\\",\\\"action_label\\\":[\\\"G-QT89TM8J0K\\\",\\\"MC-0622R69ZJ6\\\",\\\"AW-10814656859\\\/AxWjCIurn_sDENui6qQo\\\"]},{\\\"type\\\":\\\"page_view\\\",\\\"action_label\\\":[\\\"G-QT89TM8J0K\\\",\\\"MC-0622R69ZJ6\\\"]},{\\\"type\\\":\\\"add_payment_info\\\",\\\"action_label\\\":\\\"G-QT89TM8J0K\\\"},{\\\"type\\\":\\\"add_to_cart\\\",\\\"action_label\\\":\\\"G-QT89TM8J0K\\\"}],\\\"enable_monitoring_mode\\\":false}\"}", "eventPayloadVersion": "v1", "runtimeContext": "OPEN", "scriptVersion": "b2a88bafab3e21179ed38636efcd8a93", "type": "APP", "apiClientId": 1780363, "privacyPurposes": [], "dataSharingAdjustments": { "protectedCustomerApprovalScopes": ["read_customer_address", "read_customer_email", "read_customer_name", "read_customer_personal_data", "read_customer_phone"] } }, { "id": "shopify-app-pixel", "configuration": "{}", "eventPayloadVersion": "v1", "runtimeContext": "STRICT", "scriptVersion": "0450", "apiClientId": "shopify-pixel", "type": "APP", "privacyPurposes": ["ANALYTICS", "MARKETING"] }, { "id": "shopify-custom-pixel", "eventPayloadVersion": "v1", "runtimeContext": "LAX", "scriptVersion": "0450", "apiClientId": "shopify-pixel", "type": "CUSTOM", "privacyPurposes": ["ANALYTICS", "MARKETING"] }], isMerchantRequest: false, initData: { "shop": { "name": "Maharaja Supermarket", "paymentSettings": { "currencyCode": "RON" }, "myshopifyDomain": "new-Maharaja Supermarket.myshopify.com", "countryCode": "PL", "storefrontUrl": "https:\/\/maharajasupermarket.ro" }, "customer": null, "cart": null, "checkout": null, "productVariants": [], "purchasingCompany": null }, }, "https://maharajasupermarket.ro/cdn", "da62cc92w68dfea28pcf9825a4m392e00d0", { "modern": "", "legacy": "" }, { "shopId": "63657836700", "storefrontBaseUrl": "https:\/\/maharajasupermarket.ro", "extensionBaseUrl": "https:\/\/extensions.shopifycdn.com\/cdn\/shopifycloud\/web-pixels-manager", "surface": "storefront-renderer", "enabledBetaFlags": "[\"2dca8a86\", \"a0d5f9d2\"]", "isMerchantRequest": "false", "hashVersion": "da62cc92w68dfea28pcf9825a4m392e00d0", "publish": "custom", "events": "[[\"page_viewed\",{}]]" });</script>
-  <script async="" src="https://maharajasupermarket.ro/cdn/wpm/bda62cc92w68dfea28pcf9825a4m392e00d0m.js"
+    id="web-pixels-manager-setup">(function e(e, d, r, n, o) { if (void 0 === o && (o = {}), !Boolean(null === (a = null === (i = window.Shopify) || void 0 === i ? void 0 : i.analytics) || void 0 === a ? void 0 : a.replayQueue)) { var i, a; window.Shopify = window.Shopify || {}; var t = window.Shopify; t.analytics = t.analytics || {}; var s = t.analytics; s.replayQueue = [], s.publish = function (e, d, r) { return s.replayQueue.push([e, d, r]), !0 }; try { self.performance.mark("wpm:start") } catch (e) { } var l = function () { var e = { modern: /Edge?\/(1{2}[4-9]|1[2-9]\d|[2-9]\d{2}|\d{4,})\.\d+(\.\d+|)|Firefox\/(1{2}[4-9]|1[2-9]\d|[2-9]\d{2}|\d{4,})\.\d+(\.\d+|)|Chrom(ium|e)\/(9{2}|\d{3,})\.\d+(\.\d+|)|(Maci|X1{2}).+ Version\/(15\.\d+|(1[6-9]|[2-9]\d|\d{3,})\.\d+)([,.]\d+|)( \(\w+\)|)( Mobile\/\w+|) Safari\/|Chrome.+OPR\/(9{2}|\d{3,})\.\d+\.\d+|(CPU[ +]OS|iPhone[ +]OS|CPU[ +]iPhone|CPU IPhone OS|CPU iPad OS)[ +]+(15[._]\d+|(1[6-9]|[2-9]\d|\d{3,})[._]\d+)([._]\d+|)|Android:?[ /-](13[3-9]|1[4-9]\d|[2-9]\d{2}|\d{4,})(\.\d+|)(\.\d+|)|Android.+Firefox\/(13[5-9]|1[4-9]\d|[2-9]\d{2}|\d{4,})\.\d+(\.\d+|)|Android.+Chrom(ium|e)\/(13[3-9]|1[4-9]\d|[2-9]\d{2}|\d{4,})\.\d+(\.\d+|)|SamsungBrowser\/([2-9]\d|\d{3,})\.\d+/, legacy: /Edge?\/(1[6-9]|[2-9]\d|\d{3,})\.\d+(\.\d+|)|Firefox\/(5[4-9]|[6-9]\d|\d{3,})\.\d+(\.\d+|)|Chrom(ium|e)\/(5[1-9]|[6-9]\d|\d{3,})\.\d+(\.\d+|)([\d.]+$|.*Safari\/(?![\d.]+ Edge\/[\d.]+$))|(Maci|X1{2}).+ Version\/(10\.\d+|(1[1-9]|[2-9]\d|\d{3,})\.\d+)([,.]\d+|)( \(\w+\)|)( Mobile\/\w+|) Safari\/|Chrome.+OPR\/(3[89]|[4-9]\d|\d{3,})\.\d+\.\d+|(CPU[ +]OS|iPhone[ +]OS|CPU[ +]iPhone|CPU IPhone OS|CPU iPad OS)[ +]+(10[._]\d+|(1[1-9]|[2-9]\d|\d{3,})[._]\d+)([._]\d+|)|Android:?[ /-](13[3-9]|1[4-9]\d|[2-9]\d{2}|\d{4,})(\.\d+|)(\.\d+|)|Mobile Safari.+OPR\/([89]\d|\d{3,})\.\d+\.\d+|Android.+Firefox\/(13[5-9]|1[4-9]\d|[2-9]\d{2}|\d{4,})\.\d+(\.\d+|)|Android.+Chrom(ium|e)\/(13[3-9]|1[4-9]\d|[2-9]\d{2}|\d{4,})\.\d+(\.\d+|)|Android.+(UC? ?Browser|UCWEB|U3)[ /]?(15\.([5-9]|\d{2,})|(1[6-9]|[2-9]\d|\d{3,})\.\d+)\.\d+|SamsungBrowser\/(5\.\d+|([6-9]|\d{2,})\.\d+)|Android.+MQ{2}Browser\/(14(\.(9|\d{2,})|)|(1[5-9]|[2-9]\d|\d{3,})(\.\d+|))(\.\d+|)|K[Aa][Ii]OS\/(3\.\d+|([4-9]|\d{2,})\.\d+)(\.\d+|)/ }, d = e.modern, r = e.legacy, n = navigator.userAgent; return n.match(d) ? "modern" : n.match(r) ? "legacy" : "unknown" }(), u = "modern" === l ? "modern" : "legacy", c = (null != n ? n : { modern: "", legacy: "" })[u], f = function (e) { return [e.baseUrl, "/wpm", "/b", e.hashVersion, "modern" === e.buildTarget ? "m" : "l", ".js"].join("") }({ baseUrl: d, hashVersion: r, buildTarget: u }), m = function (e) { var d = e.version, r = e.bundleTarget, n = e.surface, o = e.pageUrl, i = e.monorailEndpoint; return { emit: function (e) { var a = e.status, t = e.errorMsg, s = (new Date).getTime(), l = JSON.stringify({ metadata: { event_sent_at_ms: s }, events: [{ schema_id: "web_pixels_manager_load/3.1", payload: { version: d, bundle_target: r, page_url: o, status: a, surface: n, error_msg: t }, metadata: { event_created_at_ms: s } }] }); if (!i) return console && console.warn && console.warn("[Web Pixels Manager] No Monorail endpoint provided, skipping logging."), !1; try { return self.navigator.sendBeacon.bind(self.navigator)(i, l) } catch (e) { } var u = new XMLHttpRequest; try { return u.open("POST", i, !0), u.setRequestHeader("Content-Type", "text/plain"), u.send(l), !0 } catch (e) { return console && console.warn && console.warn("[Web Pixels Manager] Got an unhandled error while logging to Monorail."), !1 } } } }({ version: r, bundleTarget: l, surface: e.surface, pageUrl: self.location.href, monorailEndpoint: e.monorailEndpoint }); try { o.browserTarget = l, function (e) { var d = e.src, r = e.async, n = void 0 === r || r, o = e.onload, i = e.onerror, a = e.sri, t = e.scriptDataAttributes, s = void 0 === t ? {} : t, l = document.createElement("script"), u = document.querySelector("head"), c = document.querySelector("body"); if (l.async = n, l.src = d, a && (l.integrity = a, l.crossOrigin = "anonymous"), s) for (var f in s) if (Object.prototype.hasOwnProperty.call(s, f)) try { l.dataset[f] = s[f] } catch (e) { } if (o && l.addEventListener("load", o), i && l.addEventListener("error", i), u) u.appendChild(l); else { if (!c) throw new Error("Did not find a head or body element to append the script"); c.appendChild(l) } }({ src: f, async: !0, onload: function () { if (!function () { var e, d; return Boolean(null === (d = null === (e = window.Shopify) || void 0 === e ? void 0 : e.analytics) || void 0 === d ? void 0 : d.initialized) }()) { var d = window.webPixelsManager.init(e) || void 0; if (d) { var r = window.Shopify.analytics; r.replayQueue.forEach((function (e) { var r = e[0], n = e[1], o = e[2]; d.publishCustomEvent(r, n, o) })), r.replayQueue = [], r.publish = d.publishCustomEvent, r.visitor = d.visitor, r.initialized = !0 } } }, onerror: function () { return m.emit({ status: "failed", errorMsg: "".concat(f, " has failed to load") }) }, sri: function (e) { var d = /^sha384-[A-Za-z0-9+/=]+$/; return "string" == typeof e && d.test(e) }(c) ? c : "", scriptDataAttributes: o }), m.emit({ status: "loading" }) } catch (e) { m.emit({ status: "failed", errorMsg: (null == e ? void 0 : e.message) || "Unknown error" }) } } })({ shopId: 63657836700, storefrontBaseUrl: "https://maharajasupermarket.ro", extensionsBaseUrl: "https://extensions.shopifycdn.com/cdn/shopifycloud/web-pixels-manager", monorailEndpoint: "https://monorail-edge.shopifysvc.com/unstable/produce_batch", surface: "storefront-renderer", enabledBetaFlags: ["2dca8a86", "a0d5f9d2"], webPixelsConfigList: [{ "id": "1055391900", "configuration": "{\"webPixelName\":\"Judge.me\"}", "eventPayloadVersion": "v1", "runtimeContext": "STRICT", "scriptVersion": "34ad157958823915625854214640f0bf", "type": "APP", "apiClientId": 683015, "privacyPurposes": ["ANALYTICS"], "dataSharingAdjustments": { "protectedCustomerApprovalScopes": ["read_customer_email", "read_customer_name", "read_customer_personal_data", "read_customer_phone"] } }, { "id": "617119900", "configuration": "{\"pixel_id\":\"422866954167895\",\"pixel_type\":\"facebook_pixel\"}", "eventPayloadVersion": "v1", "runtimeContext": "OPEN", "scriptVersion": "ca16bc87fe92b6042fbaa3acc2fbdaa6", "type": "APP", "apiClientId": 2329312, "privacyPurposes": ["ANALYTICS", "MARKETING", "SALE_OF_DATA"], "dataSharingAdjustments": { "protectedCustomerApprovalScopes": ["read_customer_address", "read_customer_email", "read_customer_name", "read_customer_personal_data", "read_customer_phone"] } }, { "id": "564789404", "configuration": "{\"config\":\"{\\\"google_tag_ids\\\":[\\\"G-QT89TM8J0K\\\",\\\"GT-K8GX9H7D\\\"],\\\"target_country\\\":\\\"ZZ\\\",\\\"gtag_events\\\":[{\\\"type\\\":\\\"search\\\",\\\"action_label\\\":\\\"G-QT89TM8J0K\\\"},{\\\"type\\\":\\\"begin_checkout\\\",\\\"action_label\\\":\\\"G-QT89TM8J0K\\\"},{\\\"type\\\":\\\"view_item\\\",\\\"action_label\\\":[\\\"G-QT89TM8J0K\\\",\\\"MC-0622R69ZJ6\\\"]},{\\\"type\\\":\\\"purchase\\\",\\\"action_label\\\":[\\\"G-QT89TM8J0K\\\",\\\"MC-0622R69ZJ6\\\",\\\"AW-10814656859\\\/AxWjCIurn_sDENui6qQo\\\"]},{\\\"type\\\":\\\"page_view\\\",\\\"action_label\\\":[\\\"G-QT89TM8J0K\\\",\\\"MC-0622R69ZJ6\\\"]},{\\\"type\\\":\\\"add_payment_info\\\",\\\"action_label\\\":\\\"G-QT89TM8J0K\\\"},{\\\"type\\\":\\\"add_to_cart\\\",\\\"action_label\\\":\\\"G-QT89TM8J0K\\\"}],\\\"enable_monitoring_mode\\\":false}\"}", "eventPayloadVersion": "v1", "runtimeContext": "OPEN", "scriptVersion": "b2a88bafab3e21179ed38636efcd8a93", "type": "APP", "apiClientId": 1780363, "privacyPurposes": [], "dataSharingAdjustments": { "protectedCustomerApprovalScopes": ["read_customer_address", "read_customer_email", "read_customer_name", "read_customer_personal_data", "read_customer_phone"] } }, { "id": "shopify-app-pixel", "configuration": "{}", "eventPayloadVersion": "v1", "runtimeContext": "STRICT", "scriptVersion": "0450", "apiClientId": "shopify-pixel", "type": "APP", "privacyPurposes": ["ANALYTICS", "MARKETING"] }, { "id": "shopify-custom-pixel", "eventPayloadVersion": "v1", "runtimeContext": "LAX", "scriptVersion": "0450", "apiClientId": "shopify-pixel", "type": "CUSTOM", "privacyPurposes": ["ANALYTICS", "MARKETING"] }], isMerchantRequest: false, initData: { "shop": { "name": "Maharaja Supermarket", "paymentSettings": { "currencyCode": "RON" }, "myshopifyDomain": "new-Maharaja Supermarket.myshopify.com", "countryCode": "PL", "storefrontUrl": "https:\/\/maharajasupermarket.ro" }, "customer": null, "cart": null, "checkout": null, "productVariants": [], "purchasingCompany": null }, }, "/cdn", "da62cc92w68dfea28pcf9825a4m392e00d0", { "modern": "", "legacy": "" }, { "shopId": "63657836700", "storefrontBaseUrl": "https:\/\/maharajasupermarket.ro", "extensionBaseUrl": "https:\/\/extensions.shopifycdn.com\/cdn\/shopifycloud\/web-pixels-manager", "surface": "storefront-renderer", "enabledBetaFlags": "[\"2dca8a86\", \"a0d5f9d2\"]", "isMerchantRequest": "false", "hashVersion": "da62cc92w68dfea28pcf9825a4m392e00d0", "publish": "custom", "events": "[[\"page_viewed\",{}]]" });</script>
+  <script async="" src="/cdn/wpm/bda62cc92w68dfea28pcf9825a4m392e00d0m.js"
     data-shop-id="63657836700" data-storefront-base-url="https://maharajasupermarket.ro"
     data-extension-base-url="https://extensions.shopifycdn.com/cdn/shopifycloud/web-pixels-manager"
     data-surface="storefront-renderer" data-enabled-beta-flags="[" 2dca8a86",="" "a0d5f9d2" ]"=""
@@ -2640,13 +2643,13 @@ if (file_exists($config_path_local)) {
 
     })();</script>
   <script async=""
-    src="https://maharajasupermarket.ro/cdn/shopifycloud/storefront/assets/shop_events_listener-3da45d37.js"></script>
-  <script defer="" src="https://maharajasupermarket.ro/cdn/shopifycloud/perf-kit/shopify-perf-kit-2.1.2.min.js"
+    src="/cdn/shopifycloud/storefront/assets/shop_events_listener-3da45d37.js"></script>
+  <script defer="" src="/cdn/shopifycloud/perf-kit/shopify-perf-kit-2.1.2.min.js"
     data-application="storefront-renderer" data-shop-id="63657836700" data-render-region="gcp-europe-west1"
     data-page-type="index" data-theme-instance-id="141771800732" data-theme-name="style" data-theme-version="6.2.0"
     data-monorail-region="shop_domain" data-resource-timing-sampling-rate="10" data-shs="true" data-shs-beacon="true"
     data-shs-export-with-fetch="true" data-shs-logs-sample-rate="1"
-    data-shs-beacon-endpoint="https://maharajasupermarket.ro/api/collect"></script>
+    data-shs-beacon-endpoint="/api/collect"></script>
   <script>window.ShopifyAnalytics = window.ShopifyAnalytics || {}; window.ShopifyAnalytics.performance = window.ShopifyAnalytics.performance || {}; (function () { const LONG_FRAME_THRESHOLD = 50; const longAnimationFrames = []; let activeRafId = null; function collectLongFrames() { let previousTime = null; function rafMonitor(now) { if (activeRafId === null) { return; } const delta = now - previousTime; if (delta > LONG_FRAME_THRESHOLD) { longAnimationFrames.push({ startTime: previousTime, endTime: now, }); } previousTime = now; activeRafId = requestAnimationFrame(rafMonitor); } previousTime = performance.now(); activeRafId = requestAnimationFrame(rafMonitor); } if (!PerformanceObserver.supportedEntryTypes.includes('long-animation-frame')) { collectLongFrames(); const timeoutId = setTimeout(() => { cancelAnimationFrame(activeRafId); }, 10_000); window.ShopifyAnalytics.performance.getLongAnimationFrames = function (stopCollection = false) { if (stopCollection) { clearTimeout(timeoutId); cancelAnimationFrame(activeRafId); } return longAnimationFrames; }; } })();</script>
 </head>
 
@@ -2755,12 +2758,21 @@ if (file_exists($config_path_local)) {
         </div>
 
         <div class="header-sign-in-up__group">
-          <a href="/account/login" class="btn btn--secondary btn--sm">
-            Sign In
-          </a>
-          <a href="/account/register" class="btn btn--primary btn--sm">
-            Sign Up
-          </a>
+          <?php if (isset($_SESSION['customer_id'])): ?>
+            <div class="user-account-dropdown">
+              <span class="welcome-text" style="font-weight: 600; margin-right: 10px;">
+                Welcome, <?php echo htmlspecialchars($_SESSION['customer_name'] ?? 'User'); ?>
+              </span>
+              <a href="/account/logout.php" class="btn btn--secondary btn--sm">Logout</a>
+            </div>
+          <?php else: ?>
+            <a href="/account/login.php" class="btn btn--secondary btn--sm">
+              Sign In
+            </a>
+            <a href="/account/register.php" class="btn btn--primary btn--sm">
+              Sign Up
+            </a>
+          <?php endif; ?>
         </div>
 
       </div>
@@ -2771,15 +2783,15 @@ if (file_exists($config_path_local)) {
           <div class="logo-col">
             <h1>
               <a href="/">
-                <img src="maharaja_logo.png" loading="eager" alt="Nav brand">
+                <img src="/uploads/maharaja_logo.png" loading="eager" alt="Nav brand">
               </a>
             </h1>
           </div>
           <ul class="header__top-navigation">
-            <li><a href="shop.php?category=promotion">MEGA SALE!</a></li>
-            <li><a href="contact.php">Contact Us</a></li>
+            <li><a href="/shop.php?category=promotion">MEGA SALE!</a></li>
+            <li><a href="/contact.php">Contact Us</a></li>
             <li><a href="/pages/faq">FAQ</a></li>
-            <li><a href="shop.php?category=shop-all">Shop All</a></li>
+            <li><a href="/shop.php?category=shop-all">Shop All</a></li>
 
           </ul>
           <div class="right-side-header">
@@ -3187,54 +3199,37 @@ if (file_exists($config_path_local)) {
 
 
                     <li class="">
-                      <a
-                        href="https://maharajasupermarket.ro/collections/shop-all?filter.v.price.gte=&filter.v.price.lte=&filter.p.vendor=Double+Horse&sort_by=best-selling">Double
-                        Horse</a>
-
+                      <a href="shop.php?category=double-horse">Double Horse</a>
                     </li>
 
 
                     <li class="">
-                      <a
-                        href="https://maharajasupermarket.ro/collections/shop-all?filter.v.price.gte=&filter.v.price.lte=&filter.p.vendor=Sweekar&sort_by=best-selling">Sweekar</a>
-
+                      <a href="shop.php?category=sweekar">Sweekar</a>
                     </li>
 
 
                     <li class="">
-                      <a
-                        href="https://maharajasupermarket.ro/collections/shop-all?filter.v.price.gte=&filter.v.price.lte=&filter.p.vendor=Kitchen+Treasures&sort_by=best-selling">Kitchen
-                        Treasures</a>
-
+                      <a href="shop.php?category=kitchen-treasures">Kitchen Treasures</a>
                     </li>
 
 
                     <li class="">
-                      <a
-                        href="https://maharajasupermarket.ro/collections/shop-all?filter.v.price.gte=&filter.v.price.lte=&filter.p.vendor=Patanjali&sort_by=best-selling">Patanjali</a>
-
+                      <a href="shop.php?category=patanjali">Patanjali</a>
                     </li>
 
 
                     <li class="">
-                      <a
-                        href="https://maharajasupermarket.ro/collections/shop-all?filter.v.price.gte=&filter.v.price.lte=&filter.p.vendor=Organic+India&sort_by=best-selling">Organic
-                        India</a>
-
+                      <a href="shop.php?category=organic-india">Organic India</a>
                     </li>
 
 
                     <li class="">
                       <a href="shop.php?category=bikano">Bikano</a>
-
                     </li>
 
 
                     <li class="">
-                      <a
-                        href="https://maharajasupermarket.ro/collections/shop-all?filter.v.price.gte=&filter.v.price.lte=&filter.p.vendor=JFK&sort_by=best-selling">JFK
-                        Indian Coffee</a>
-
+                      <a href="shop.php?category=jfk">JFK Indian Coffee</a>
                     </li>
 
 
@@ -5860,7 +5855,7 @@ if (file_exists($config_path_local)) {
 
               <li class="menu-h-link ">
                 <a class="acnav-label"
-                  href="https://maharajasupermarket.ro/collections/shop-all?filter.v.price.gte=&filter.v.price.lte=&filter.p.vendor=Double+Horse&sort_by=best-selling">Double
+                  href="shop.php?category=Double+Horse">Double
                   Horse
 
                 </a>
@@ -5870,7 +5865,7 @@ if (file_exists($config_path_local)) {
 
               <li class="menu-h-link ">
                 <a class="acnav-label"
-                  href="https://maharajasupermarket.ro/collections/shop-all?filter.v.price.gte=&filter.v.price.lte=&filter.p.vendor=Sweekar&sort_by=best-selling">Sweekar
+                  href="shop.php?category=Sweekar">Sweekar
 
                 </a>
 
@@ -5879,7 +5874,7 @@ if (file_exists($config_path_local)) {
 
               <li class="menu-h-link ">
                 <a class="acnav-label"
-                  href="https://maharajasupermarket.ro/collections/shop-all?filter.v.price.gte=&filter.v.price.lte=&filter.p.vendor=Kitchen+Treasures&sort_by=best-selling">Kitchen
+                  href="shop.php?category=Kitchen+Treasures">Kitchen
                   Treasures
 
                 </a>
@@ -5889,7 +5884,7 @@ if (file_exists($config_path_local)) {
 
               <li class="menu-h-link ">
                 <a class="acnav-label"
-                  href="https://maharajasupermarket.ro/collections/shop-all?filter.v.price.gte=&filter.v.price.lte=&filter.p.vendor=Patanjali&sort_by=best-selling">Patanjali
+                  href="shop.php?category=Patanjali">Patanjali
 
                 </a>
 
@@ -5898,7 +5893,7 @@ if (file_exists($config_path_local)) {
 
               <li class="menu-h-link ">
                 <a class="acnav-label"
-                  href="https://maharajasupermarket.ro/collections/shop-all?filter.v.price.gte=&filter.v.price.lte=&filter.p.vendor=Organic+India&sort_by=best-selling">Organic
+                  href="shop.php?category=Organic+India">Organic
                   India
 
                 </a>
@@ -5916,7 +5911,7 @@ if (file_exists($config_path_local)) {
 
               <li class="menu-h-link ">
                 <a class="acnav-label"
-                  href="https://maharajasupermarket.ro/collections/shop-all?filter.v.price.gte=&filter.v.price.lte=&filter.p.vendor=JFK&sort_by=best-selling">JFK
+                  href="shop.php?category=JFK">JFK
                   Indian Coffee
 
                 </a>
@@ -6512,8 +6507,8 @@ if (file_exists($config_path_local)) {
               <div class="sale-banner-slide swiper-slide">
                 <a href="shop.php?category=sweekar">
                   <picture>
-                    <source media="(max-width: 610px)" srcset="sweekarbannermobile2_v=1764252561.webp">
-                    <img src="sweekarbannerdesktop2_v=1764252561.webp" loading="eager" alt="">
+                    <source media="(max-width: 610px)" srcset="uploads/sweekarbannermobile2_v=1764252561.webp">
+                    <img src="uploads/sweekarbannerdesktop2_v=1764252561.webp" loading="eager" alt="">
                   </picture>
                 </a>
               </div>
@@ -6523,8 +6518,8 @@ if (file_exists($config_path_local)) {
               <div class="sale-banner-slide swiper-slide">
                 <a href="#amira-long-grain-basmati-rice-5-kg">
                   <picture>
-                    <source media="(max-width: 610px)" srcset="amirabannermobile_v=1764247928.webp">
-                    <img src="amirabannerdesktop_v=1764247906.webp" loading="eager" alt="">
+                    <source media="(max-width: 610px)" srcset="uploads/amirabannermobile_v=1764247928.webp">
+                    <img src="uploads/amirabannerdesktop_v=1764247906.webp" loading="eager" alt="">
                   </picture>
                 </a>
               </div>
@@ -6534,8 +6529,8 @@ if (file_exists($config_path_local)) {
               <div class="sale-banner-slide swiper-slide">
                 <a href="#double-horse-jaggery-powder-600g">
                   <picture>
-                    <source media="(max-width: 610px)" srcset="dhjaggery500ffmob_v=1763553759.webp">
-                    <img src="DHjaggery50off_v=1763553759.webp" loading="eager" alt="">
+                    <source media="(max-width: 610px)" srcset="uploads/dhjaggery500ffmob_v=1763553759.webp">
+                    <img src="uploads/DHjaggery50off_v=1763553759.webp" loading="eager" alt="">
                   </picture>
                 </a>
               </div>
@@ -6544,10 +6539,10 @@ if (file_exists($config_path_local)) {
 
               <div class="sale-banner-slide swiper-slide">
                 <a
-                  href="https://maharajasupermarket.ro/collections/shop-all?filter.v.price.gte=&filter.v.price.lte=&filter.p.vendor=Patanjali&sort_by=best-selling">
+                  href="shop.php?category=Patanjali">
                   <picture>
-                    <source media="(max-width: 610px)" srcset="80_off_2_v=1758894950.png">
-                    <img src="UPTO_70_OFF_8_v=1758894951.png" loading="eager" alt="">
+                    <source media="(max-width: 610px)" srcset="uploads/80_off_2_v=1758894950.png">
+                    <img src="uploads/UPTO_70_OFF_8_v=1758894951.png" loading="eager" alt="">
                   </picture>
                 </a>
               </div>
@@ -6556,10 +6551,10 @@ if (file_exists($config_path_local)) {
 
               <div class="sale-banner-slide swiper-slide">
                 <a
-                  href="https://maharajasupermarket.ro/collections/shop-all?filter.v.price.gte=&filter.v.price.lte=&filter.p.vendor=Double+Horse&sort_by=best-selling">
+                  href="shop.php?category=Double+Horse">
                   <picture>
-                    <source media="(max-width: 610px)" srcset="hero_banner-MOBILE-3_v=1742469130.webp">
-                    <img src="hero_banner-Desktop_a642ba2a-b00d-4009-ae32-29b36466fdaf_v=1742469130.webp"
+                    <source media="(max-width: 610px)" srcset="uploads/hero_banner-MOBILE-3_v=1742469130.webp">
+                    <img src="uploads/hero_banner-Desktop_a642ba2a-b00d-4009-ae32-29b36466fdaf_v=1742469130.webp"
                       loading="eager" alt="">
                   </picture>
                 </a>
@@ -6569,11 +6564,11 @@ if (file_exists($config_path_local)) {
 
               <div class="sale-banner-slide swiper-slide">
                 <a
-                  href="https://maharajasupermarket.ro/collections/shop-all?filter.v.price.gte=&filter.v.price.lte=&filter.p.vendor=Patanjali&sort_by=best-selling">
+                  href="shop.php?category=Patanjali">
                   <picture>
                     <source media="(max-width: 610px)"
-                      srcset="hero_banner-MOBILE-2_26e5142b-56d6-4fbb-98c6-a0b9d7724527_v=1742469130.webp">
-                    <img src="hero_banner-Desktop-4_v=1742469130.webp" loading="eager" alt="">
+                      srcset="uploads/hero_banner-MOBILE-2_26e5142b-56d6-4fbb-98c6-a0b9d7724527_v=1742469130.webp">
+                    <img src="uploads/hero_banner-Desktop-4_v=1742469130.webp" loading="eager" alt="">
                   </picture>
                 </a>
               </div>
@@ -6582,11 +6577,11 @@ if (file_exists($config_path_local)) {
 
               <div class="sale-banner-slide swiper-slide">
                 <a
-                  href="https://maharajasupermarket.ro/collections/shop-all?filter.v.price.gte=&filter.v.price.lte=&filter.p.vendor=Kitchen+Treasures&sort_by=best-selling">
+                  href="shop.php?category=Kitchen+Treasures">
                   <picture>
                     <source media="(max-width: 610px)"
-                      srcset="hero_banner-MOBILE_712d1b6f-8d64-4547-a094-2dd79e1621f9_v=1742469130.webp">
-                    <img src="hero_banner-Desktop-2_45c69f9e-aaa1-45df-87ff-34b897692702_v=1742469131.webp"
+                      srcset="uploads/hero_banner-MOBILE_712d1b6f-8d64-4547-a094-2dd79e1621f9_v=1742469130.webp">
+                    <img src="uploads/hero_banner-Desktop-2_45c69f9e-aaa1-45df-87ff-34b897692702_v=1742469131.webp"
                       loading="eager" alt="">
                   </picture>
                 </a>
@@ -6596,11 +6591,11 @@ if (file_exists($config_path_local)) {
 
               <div class="sale-banner-slide swiper-slide">
                 <a
-                  href="https://maharajasupermarket.ro/collections/shop-all?filter.v.price.gte=&filter.v.price.lte=&filter.p.vendor=Bikano&sort_by=best-selling">
+                  href="shop.php?category=Bikano">
                   <picture>
                     <source media="(max-width: 610px)"
-                      srcset="hero_banner-MOBILE-1_758b7e4a-b294-419f-83e9-ab39ad298f23_v=1742469131.webp">
-                    <img src="hero_banner-Desktop-3_v=1742469130.webp" loading="eager" alt="">
+                      srcset="uploads/hero_banner-MOBILE-1_758b7e4a-b294-419f-83e9-ab39ad298f23_v=1742469131.webp">
+                    <img src="uploads/hero_banner-Desktop-3_v=1742469130.webp" loading="eager" alt="">
                   </picture>
                 </a>
               </div>
@@ -6675,7 +6670,7 @@ if (file_exists($config_path_local)) {
               <a class="category-slider__slide swiper-slide" href="shop.php?category=fresh-vegetables"
                 style="background-color: #e4edd8;">
                 <div class="category-slider__slide-img"
-                  style="background-image: url(FRESH-VEGETABLES_553147aa-80f8-4d19-bf45-be57625ed1e6_v=1747988196.png);">
+                  style="background-image: url(uploads/FRESH-VEGETABLES_553147aa-80f8-4d19-bf45-be57625ed1e6_v=1747988196.png);">
                 </div>
                 <h4 class="category-slider__slide-text">
                   Fresh Vegetables
@@ -6687,7 +6682,7 @@ if (file_exists($config_path_local)) {
               <a class="category-slider__slide swiper-slide"
                 href="shop.php?category=Maharaja Supermarket-shop-groceries-coffee-and-tea"
                 style="background-color: #e4edd8;">
-                <div class="category-slider__slide-img" style="background-image: url(Mask_group_1_v=1717325077.png);">
+                <div class="category-slider__slide-img" style="background-image: url(uploads/Mask_group_1_v=1717325077.png);">
                 </div>
                 <h4 class="category-slider__slide-text">
                   Coffee & Tea
@@ -6698,7 +6693,7 @@ if (file_exists($config_path_local)) {
 
               <a class="category-slider__slide swiper-slide" href="shop.php?category=Maharaja Supermarket-shop-groceries-oil"
                 style="background-color: #e4edd8;">
-                <div class="category-slider__slide-img" style="background-image: url(image_5_v=1717325068.png);">
+                <div class="category-slider__slide-img" style="background-image: url(uploads/image_5_v=1717325068.png);">
                 </div>
                 <h4 class="category-slider__slide-text">
                   Cooking Oils
@@ -6710,7 +6705,7 @@ if (file_exists($config_path_local)) {
               <a class="category-slider__slide swiper-slide"
                 href="shop.php?category=Maharaja Supermarket-shop-groceries-groats-and-flour"
                 style="background-color: #e4edd8;">
-                <div class="category-slider__slide-img" style="background-image: url(image_6_v=1717325063.png);">
+                <div class="category-slider__slide-img" style="background-image: url(uploads/image_6_v=1717325063.png);">
                 </div>
                 <h4 class="category-slider__slide-text">
                   Groats & Flour
@@ -6722,7 +6717,7 @@ if (file_exists($config_path_local)) {
               <a class="category-slider__slide swiper-slide"
                 href="shop.php?category=Maharaja Supermarket-shop-groceries-spices-and-herbs"
                 style="background-color: #e4edd8;">
-                <div class="category-slider__slide-img" style="background-image: url(image_10_v=1717325053.png);">
+                <div class="category-slider__slide-img" style="background-image: url(uploads/image_10_v=1717325053.png);">
                 </div>
                 <h4 class="category-slider__slide-text">
                   Spices & Herbs
@@ -6733,7 +6728,7 @@ if (file_exists($config_path_local)) {
 
               <a class="category-slider__slide swiper-slide" href="shop.php?category=default-category-snacks-and-savouries"
                 style="background-color: #e4edd8;">
-                <div class="category-slider__slide-img" style="background-image: url(Mask_group_3_v=1717325022.png);">
+                <div class="category-slider__slide-img" style="background-image: url(uploads/Mask_group_3_v=1717325022.png);">
                 </div>
                 <h4 class="category-slider__slide-text">
                   Snacks & Savouries
@@ -6744,7 +6739,7 @@ if (file_exists($config_path_local)) {
 
               <a class="category-slider__slide swiper-slide"
                 href="shop.php?category=Maharaja Supermarket-shop-dietary-supplements" style="background-color: #e4edd8;">
-                <div class="category-slider__slide-img" style="background-image: url(Mask_group_2_v=1717325059.png);">
+                <div class="category-slider__slide-img" style="background-image: url(uploads/Mask_group_2_v=1717325059.png);">
                 </div>
                 <h4 class="category-slider__slide-text">
                   Dietary Supplements
@@ -6756,7 +6751,7 @@ if (file_exists($config_path_local)) {
               <a class="category-slider__slide swiper-slide"
                 href="shop.php?category=Maharaja Supermarket-shop-groceries-juices-and-nectars"
                 style="background-color: #e4edd8;">
-                <div class="category-slider__slide-img" style="background-image: url(image_9_v=1717325055.png);">
+                <div class="category-slider__slide-img" style="background-image: url(uploads/image_9_v=1717325055.png);">
                 </div>
                 <h4 class="category-slider__slide-text">
                   Juices & Nectars
@@ -6854,25 +6849,25 @@ if (file_exists($config_path_local)) {
           <div class="collection-slider__swiper">
             <div class="swiper-wrapper">
               <?php
-              $sql = "SELECT * FROM products ORDER BY created_at DESC LIMIT 10";
+              $sql = "SELECT * FROM products WHERE is_active = 1 ORDER BY created_at DESC LIMIT 10";
               $result = mysqli_query($link, $sql);
               if (mysqli_num_rows($result) > 0) {
                 while ($row = mysqli_fetch_assoc($result)) {
-                  $image_path = !empty($row['image']) ? '/uploads/products/' . $row['image'] : 'https://placehold.co/600x400';
+                  $image_path = !empty($row['image']) ? 'uploads/' . $row['image'] : 'https://placehold.co/600x400';
                   ?>
                       <div class="collection-slide swiper-slide">
                         <div class="product-card-inner card-inner">
                           <div class="product-card-image card__media">
                             <a href="product.php?id=<?php echo $row['id']; ?>">
                               <img loading="lazy" src="<?php echo $image_path; ?>"
-                                alt="<?php echo htmlspecialchars($row['title']); ?>">
+                                alt="<?php echo htmlspecialchars($row[get_col('title')]); ?>">
                             </a>
                           </div>
                           <div class="product-content">
                             <div class="product-content-top">
                               <h3 class="product-title">
                                 <a href="product.php?id=<?php echo $row['id']; ?>">
-                                  <?php echo htmlspecialchars($row['title']); ?>
+                                  <?php echo htmlspecialchars($row[get_col('title')]); ?>
                                         </a>
                                       </h3>
                                     </div>
@@ -6968,7 +6963,7 @@ if (file_exists($config_path_local)) {
                   </a>
                 </div>
                 <div class="weekly-specials__slide-featued-img">
-                  <img src="amul500-removebg-preview_v=1750158971.png"
+                  <img src="uploads/amul500-removebg-preview_v=1750158971.png"
                     loading="lazy" alt="">
                 </div>
               </div>
@@ -7000,7 +6995,7 @@ if (file_exists($config_path_local)) {
                 </div>
                 <div class="weekly-specials__slide-featued-img">
                   <img
-                    src="papadamritsari-removebg-preview_v=1726485173.png"
+                    src="uploads/papadamritsari-removebg-preview_v=1726485173.png"
                     loading="lazy" alt="">
                 </div>
               </div>
@@ -7032,7 +7027,7 @@ if (file_exists($config_path_local)) {
                   </a>
                 </div>
                 <div class="weekly-specials__slide-featued-img">
-                  <img src="pathajali_v=1726697467.png" loading="lazy"
+                  <img src="uploads/pathajali_v=1726697467.png" loading="lazy"
                     alt="">
                 </div>
               </div>
@@ -7124,7 +7119,7 @@ if (file_exists($config_path_local)) {
                       data-media-id="template--17996521046172__collection_slider_CHHC4j-8718968520860-34917752176796"
                       tabindex="0">
                       <img loading="lazy" class=""
-                        srcset="shan_chicken_masala_600x400_v=1765880636.webp"
+                        srcset="uploads/shan_chicken_masala_600x400_v=1765880636.webp"
                         alt="">
                     </a>
                     <div class="wish-lbl-wrp">
@@ -7290,7 +7285,7 @@ if (file_exists($config_path_local)) {
                       data-media-id="template--17996521046172__collection_slider_CHHC4j-8446921244828-33639952908444"
                       tabindex="0">
                       <img loading="lazy" class=""
-                        srcset="71mYVSXS8TL._AC_UF1000_1000_QL80_c688df58-4fbc-48e6-a623-0475842def9c_600x400_v=1749653479.webp"
+                        srcset="uploads/71mYVSXS8TL._AC_UF1000_1000_QL80_c688df58-4fbc-48e6-a623-0475842def9c_600x400_v=1749653479.webp"
                         alt="">
                     </a>
                     <div class="wish-lbl-wrp">
@@ -7455,7 +7450,7 @@ if (file_exists($config_path_local)) {
                       data-media-id="template--17996521046172__collection_slider_CHHC4j-8446921343132-33639953236124"
                       tabindex="0">
                       <img loading="lazy" class=""
-                        srcset="bihari_becb275f-32fc-4d96-af57-cf5c77309e6f_600x400_v=1749653486.webp"
+                        srcset="uploads/bihari_becb275f-32fc-4d96-af57-cf5c77309e6f_600x400_v=1749653486.webp"
                         alt="">
                     </a>
                     <div class="wish-lbl-wrp">
@@ -7621,7 +7616,7 @@ if (file_exists($config_path_local)) {
                       data-media-id="template--17996521046172__collection_slider_CHHC4j-8446921441436-33639953727644"
                       tabindex="0">
                       <img loading="lazy" class=""
-                        srcset="keema1_25aae058-cee2-41cb-9a2c-632eafd6794a_600x400_v=1749653494.webp"
+                        srcset="uploads/keema1_25aae058-cee2-41cb-9a2c-632eafd6794a_600x400_v=1749653494.webp"
                         alt="">
                     </a>
                     <div class="wish-lbl-wrp">
@@ -7786,7 +7781,7 @@ if (file_exists($config_path_local)) {
                       data-media-id="template--17996521046172__collection_slider_CHHC4j-8446921703580-33639954612380"
                       tabindex="0">
                       <img loading="lazy" class=""
-                        srcset="719YNoYts3L._AC_UF894_1000_QL80_d6ff8ae0-8cc6-456e-80ff-f7a266246efc_600x400_v=1749653508.jpg"
+                        srcset="uploads/719YNoYts3L._AC_UF894_1000_QL80_d6ff8ae0-8cc6-456e-80ff-f7a266246efc_600x400_v=1749653508.jpg"
                         alt="">
                     </a>
                     <div class="wish-lbl-wrp">
@@ -7952,7 +7947,7 @@ if (file_exists($config_path_local)) {
                       data-media-id="template--17996521046172__collection_slider_CHHC4j-8446922031260-33639955562652"
                       tabindex="0">
                       <img loading="lazy" class=""
-                        srcset="shan_seekh_kabab_01e13dae-92bd-4365-a4db-08fd07bf7d92_600x400_v=1749653527.webp"
+                        srcset="uploads/shan_seekh_kabab_01e13dae-92bd-4365-a4db-08fd07bf7d92_600x400_v=1749653527.webp"
                         alt="">
                     </a>
                     <div class="wish-lbl-wrp">
@@ -8117,7 +8112,7 @@ if (file_exists($config_path_local)) {
                       data-media-id="template--17996521046172__collection_slider_CHHC4j-8446922096796-33639955693724"
                       tabindex="0">
                       <img loading="lazy" class=""
-                        srcset="Shan_Memoni_Mutton_Biryani_Masala_100g-Shan-Spices_800x_9d0c9d4f-c8ec-41c2-b29f-e6a927cbf272_600x400_v=1749653530.webp"
+                        srcset="uploads/Shan_Memoni_Mutton_Biryani_Masala_100g-Shan-Spices_800x_9d0c9d4f-c8ec-41c2-b29f-e6a927cbf272_600x400_v=1749653530.webp"
                         alt="">
                     </a>
                     <div class="wish-lbl-wrp">
@@ -8283,7 +8278,7 @@ if (file_exists($config_path_local)) {
                       data-media-id="template--17996521046172__collection_slider_CHHC4j-8446922162332-33639955955868"
                       tabindex="0">
                       <img loading="lazy" class=""
-                        srcset="shan_chicken_white_korma_b9040d57-e6c3-408a-af16-042a068e51f3_600x400_v=1749653533.webp"
+                        srcset="uploads/shan_chicken_white_korma_b9040d57-e6c3-408a-af16-042a068e51f3_600x400_v=1749653533.webp"
                         alt="">
                     </a>
                     <div class="wish-lbl-wrp">
@@ -8449,7 +8444,7 @@ if (file_exists($config_path_local)) {
                       data-media-id="template--17996521046172__collection_slider_CHHC4j-8446922195100-33639956218012"
                       tabindex="0">
                       <img loading="lazy" class=""
-                        srcset="shan_kofta_be7fe03c-d883-430f-b760-195df699cff9_600x400_v=1749653536.webp"
+                        srcset="uploads/shan_kofta_be7fe03c-d883-430f-b760-195df699cff9_600x400_v=1749653536.webp"
                         alt="">
                     </a>
                     <div class="wish-lbl-wrp">
@@ -8615,7 +8610,7 @@ if (file_exists($config_path_local)) {
                       data-media-id="template--17996521046172__collection_slider_CHHC4j-8446922391708-33639956611228"
                       tabindex="0">
                       <img loading="lazy" class=""
-                        srcset="puloitharai_1_d25a8ac1-2722-4c76-a83c-e5c4c22fe4ba_600x400_v=1749653545.webp"
+                        srcset="uploads/puloitharai_1_d25a8ac1-2722-4c76-a83c-e5c4c22fe4ba_600x400_v=1749653545.webp"
                         alt="">
                     </a>
                     <div class="wish-lbl-wrp">
@@ -8863,7 +8858,7 @@ if (file_exists($config_path_local)) {
                       data-media-id="template--17996521046172__collection_slider_c7fFVc-8326667403420-32766613291164"
                       tabindex="0">
                       <img loading="lazy" class=""
-                        srcset="dhinstantidiyappamwhite-removebg_600x400_v=1738749188.png"
+                        srcset="uploads/dhinstantidiyappamwhite-removebg_600x400_v=1738749188.png"
                         alt="A packaged product of Double Horse Instant Idiyappam White, which is a rice noodle mix, with branding and product information displayed on the box.">
                     </a>
                     <div class="wish-lbl-wrp">
@@ -9040,7 +9035,7 @@ if (file_exists($config_path_local)) {
                       data-media-id="template--17996521046172__collection_slider_c7fFVc-8263802224796-32086218244252"
                       tabindex="0">
                       <img loading="lazy" class=""
-                        srcset="soyachunks250g_f8a96a80-2553-4515-bbe2-66a0953521b5_600x400_v=1726481469.png"
+                        srcset="uploads/soyachunks250g_f8a96a80-2553-4515-bbe2-66a0953521b5_600x400_v=1726481469.png"
                         alt="">
                     </a>
                     <div class="wish-lbl-wrp">
@@ -9216,7 +9211,7 @@ if (file_exists($config_path_local)) {
                       data-media-id="template--17996521046172__collection_slider_c7fFVc-8263802519708-32086218834076"
                       tabindex="0">
                       <img loading="lazy" class=""
-                        srcset="puffedrice_bb99e095-8500-42fa-b3c7-d77a8425cc2f_600x400_v=1726737705.jpg"
+                        srcset="uploads/puffedrice_bb99e095-8500-42fa-b3c7-d77a8425cc2f_600x400_v=1726737705.jpg"
                         alt="">
                     </a>
                     <div class="wish-lbl-wrp">
@@ -9392,7 +9387,7 @@ if (file_exists($config_path_local)) {
                       data-media-id="template--17996521046172__collection_slider_c7fFVc-8425197011100-33441200046236"
                       tabindex="0">
                       <img loading="lazy" class=""
-                        srcset="green-chilli-200-g-product-images-o590000187-p590000187-1-202409251830_600x400_v=1747139257.webp"
+                        srcset="uploads/green-chilli-200-g-product-images-o590000187-p590000187-1-202409251830_600x400_v=1747139257.webp"
                         alt="">
                     </a>
                     <div class="wish-lbl-wrp">
@@ -9603,7 +9598,7 @@ if (file_exists($config_path_local)) {
                       data-media-id="template--17996521046172__collection_slider_c7fFVc-8446919475356-33639945830556"
                       tabindex="0">
                       <img loading="lazy" class=""
-                        srcset="pooja_coconut_7c663ff4-b79c-4b1a-9616-78db9eee4e8f_600x400_v=1749653363.webp"
+                        srcset="uploads/pooja_coconut_7c663ff4-b79c-4b1a-9616-78db9eee4e8f_600x400_v=1749653363.webp"
                         alt="">
                     </a>
                     <div class="wish-lbl-wrp">
@@ -9768,7 +9763,7 @@ if (file_exists($config_path_local)) {
                       data-media-id="template--17996521046172__collection_slider_c7fFVc-8275152076956-32173126549660"
                       tabindex="0">
                       <img loading="lazy" class=""
-                        srcset="FreshOkra_600x400_v=1728243454.jpg"
+                        srcset="uploads/FreshOkra_600x400_v=1728243454.jpg"
                         alt="">
                     </a>
                     <div class="wish-lbl-wrp">
@@ -10062,7 +10057,7 @@ if (file_exists($config_path_local)) {
                       data-media-id="template--17996521046172__collection_slider_b6Hqnw-8446920163484-33639948451996"
                       tabindex="0">
                       <img loading="lazy" class=""
-                        srcset="ell_91442620-7916-416e-bd0f-6b88bdebf263_600x400_v=1749653406.webp"
+                        srcset="uploads/ell_91442620-7916-416e-bd0f-6b88bdebf263_600x400_v=1749653406.webp"
                         alt="">
                     </a>
                     <div class="wish-lbl-wrp">
@@ -10232,7 +10227,7 @@ if (file_exists($config_path_local)) {
                       data-media-id="template--17996521046172__collection_slider_b6Hqnw-8446920327324-33639949631644"
                       tabindex="0">
                       <img loading="lazy" class=""
-                        srcset="glassd_f539ed29-a7ff-4221-be9d-22cc6a716cbd_600x400_v=1749653418.webp"
+                        srcset="uploads/glassd_f539ed29-a7ff-4221-be9d-22cc6a716cbd_600x400_v=1749653418.webp"
                         alt="">
                     </a>
                     <div class="wish-lbl-wrp">
@@ -10398,7 +10393,7 @@ if (file_exists($config_path_local)) {
                       data-media-id="template--17996521046172__collection_slider_b6Hqnw-8496203071644-33997049626780"
                       tabindex="0">
                       <img loading="lazy" class=""
-                        srcset="premier550w_600x400_v=1756208621.webp"
+                        srcset="uploads/premier550w_600x400_v=1756208621.webp"
                         alt="">
                     </a>
                     <div class="wish-lbl-wrp">
@@ -10569,7 +10564,7 @@ if (file_exists($config_path_local)) {
                       data-media-id="template--17996521046172__collection_slider_b6Hqnw-8446920261788-33639948976284"
                       tabindex="0">
                       <img loading="lazy" class=""
-                        srcset="giftset_3333b4b5-7440-4a0a-9a12-23d0303db9f8_600x400_v=1749653414.webp"
+                        srcset="uploads/giftset_3333b4b5-7440-4a0a-9a12-23d0303db9f8_600x400_v=1749653414.webp"
                         alt="">
                     </a>
                     <div class="wish-lbl-wrp">
@@ -10739,7 +10734,7 @@ if (file_exists($config_path_local)) {
                       data-media-id="template--17996521046172__collection_slider_b6Hqnw-8446920032412-33639947894940"
                       tabindex="0">
                       <img loading="lazy" class=""
-                        srcset="prestige-pressure-cooker-500x500_b34842fe-a925-4a52-928b-569329997495_600x400_v=1749653398.webp"
+                        srcset="uploads/prestige-pressure-cooker-500x500_b34842fe-a925-4a52-928b-569329997495_600x400_v=1749653398.webp"
                         alt="">
                     </a>
                     <div class="wish-lbl-wrp">
@@ -10935,7 +10930,7 @@ if (file_exists($config_path_local)) {
           <div class="col-lg-3 col-xl-3 col-md-6 col-sm-6 col-12">
             <div class="category-card">
               <div class="category-img">
-                <img src="Rice_AdobeStock_64819529_E_v=1750153126.jpg"
+                <img src="uploads/Rice_AdobeStock_64819529_E_v=1750153126.jpg"
                   alt="bakers">
               </div>
               <div class="category-card-body">
@@ -10960,7 +10955,7 @@ if (file_exists($config_path_local)) {
             <div class="category-card">
               <div class="category-img">
                 <img
-                  src="is-it-possible-for-an-indian-pickle-to-go-bad_v=1750153448.jpg"
+                  src="uploads/is-it-possible-for-an-indian-pickle-to-go-bad_v=1750153448.jpg"
                   alt="bakers">
               </div>
               <div class="category-card-body">
@@ -10984,7 +10979,7 @@ if (file_exists($config_path_local)) {
           <div class="col-lg-3 col-xl-3 col-md-6 col-sm-6 col-12">
             <div class="category-card">
               <div class="category-img">
-                <img src="pulses-and-lentils_v=1750153680.jpg"
+                <img src="uploads/pulses-and-lentils_v=1750153680.jpg"
                   alt="bakers">
               </div>
               <div class="category-card-body">
@@ -11008,7 +11003,7 @@ if (file_exists($config_path_local)) {
           <div class="col-lg-3 col-xl-3 col-md-6 col-sm-6 col-12">
             <div class="category-card">
               <div class="category-img">
-                <img src="Indian-Breakfast_v=1750153834.jpg"
+                <img src="uploads/Indian-Breakfast_v=1750153834.jpg"
                   alt="bakers">
               </div>
               <div class="category-card-body">
@@ -11032,7 +11027,7 @@ if (file_exists($config_path_local)) {
         </div>
       </div>
       <div class="section-left-shape">
-        <img src="https://maharajasupermarket.ro/cdn/shopifycloud/storefront/assets/no-image-2048-a2addb12.gif" alt="">
+        <img src="/cdn/shopifycloud/storefront/assets/no-image-2048-a2addb12.gif" alt="">
       </div>
 
     </section>
@@ -11047,70 +11042,70 @@ if (file_exists($config_path_local)) {
 
             <a class="brand-slide" href="shop.php?category=patanjali">
               <div class="brand-slide__img"
-                style="background-image:url(patanjali_logo_v=1764149448.webp);">
+                style="background-image:url(uploads/patanjali_logo_v=1764149448.webp);">
               </div>
             </a>
 
 
 
             <a class="brand-slide"
-              href="https://maharajasupermarket.ro/collections/shop-all?filter.v.price.gte=&filter.v.price.lte=&filter.p.vendor=Double+Horse&sort_by=best-selling">
+              href="shop.php?category=Double+Horse">
               <div class="brand-slide__img"
-                style="background-image:url(dh_v=1726696252.png);">
+                style="background-image:url(uploads/dh_v=1726696252.png);">
               </div>
             </a>
 
 
 
             <a class="brand-slide"
-              href="https://maharajasupermarket.ro/collections/shop-all?filter.v.price.gte=&filter.v.price.lte=&filter.p.vendor=Sweekar&sort_by=best-selling">
+              href="shop.php?category=Sweekar">
               <div class="brand-slide__img"
-                style="background-image:url(sw_v=1726696251.png);">
+                style="background-image:url(uploads/sw_v=1726696251.png);">
               </div>
             </a>
 
 
 
             <a class="brand-slide"
-              href="https://maharajasupermarket.ro/collections/shop-all?filter.v.price.gte=&filter.v.price.lte=&filter.p.vendor=Kitchen+Treasures&sort_by=best-selling">
+              href="shop.php?category=Kitchen+Treasures">
               <div class="brand-slide__img"
-                style="background-image:url(image-30-66549173e903a_v=1716822069.webp);">
+                style="background-image:url(uploads/image-30-66549173e903a_v=1716822069.webp);">
               </div>
             </a>
 
 
 
             <a class="brand-slide"
-              href="https://maharajasupermarket.ro/collections/shop-all?filter.v.price.gte=&filter.v.price.lte=&filter.p.vendor=JFK&sort_by=best-selling">
+              href="shop.php?category=JFK">
               <div class="brand-slide__img"
-                style="background-image:url(image-29-66549174ac9f8_v=1716822069.webp);">
+                style="background-image:url(uploads/image-29-66549174ac9f8_v=1716822069.webp);">
               </div>
             </a>
 
 
 
             <a class="brand-slide"
-              href="https://maharajasupermarket.ro/collections/shop-all?filter.v.price.gte=&filter.v.price.lte=&filter.p.vendor=Bikano&sort_by=best-selling">
+              href="shop.php?category=Bikano">
               <div class="brand-slide__img"
-                style="background-image:url(image-33-665491734088e_v=1716822069.webp);">
+                style="background-image:url(uploads/image-33-665491734088e_v=1716822069.webp);">
               </div>
             </a>
 
 
 
             <a class="brand-slide"
-              href="https://maharajasupermarket.ro/collections/shop-all?filter.v.price.gte=&filter.v.price.lte=&filter.p.vendor=Maaza&sort_by=best-selling">
+              href="shop.php?category=Maaza">
               <div class="brand-slide__img"
-                style="background-image:url(image-35-665491757af66_v=1716822069.webp);">
+                style="background-image:url(uploads/image-35-665491757af66_v=1716822069.webp);">
               </div>
             </a>
 
 
 
             <a class="brand-slide"
-              href="https://maharajasupermarket.ro/collections/shop-all?filter.v.price.gte=&filter.v.price.lte=&filter.p.vendor=Melam&sort_by=best-selling">
+              href="shop.php?category=Melam">
               <div class="brand-slide__img"
-                style="background-image:url(image-28-66549174bb6f9_v=1716822069.webp);">
+                style="background-image:url(uploads/image-28-66549174bb6f9_v=1716822069.webp);">
               </div>
             </a>
 
@@ -11229,7 +11224,7 @@ if (file_exists($config_path_local)) {
 
             <div class="testimonial-slide">
               <div class="testimonial-slide__img">
-                <img src="user-profile_v=1725257626.png" loading="lazy"
+                <img src="uploads/user-profile_v=1725257626.png" loading="lazy"
                   alt="">
               </div>
               <div class="testimonial-slide__name">
@@ -11244,7 +11239,7 @@ if (file_exists($config_path_local)) {
 
             <div class="testimonial-slide">
               <div class="testimonial-slide__img">
-                <img src="user-profile_v=1725257626.png" loading="lazy"
+                <img src="uploads/user-profile_v=1725257626.png" loading="lazy"
                   alt="">
               </div>
               <div class="testimonial-slide__name">
@@ -11259,7 +11254,7 @@ if (file_exists($config_path_local)) {
 
             <div class="testimonial-slide">
               <div class="testimonial-slide__img">
-                <img src="user-profile_v=1725257626.png" loading="lazy"
+                <img src="uploads/user-profile_v=1725257626.png" loading="lazy"
                   alt="">
               </div>
               <div class="testimonial-slide__name">
@@ -11275,7 +11270,7 @@ if (file_exists($config_path_local)) {
 
             <div class="testimonial-slide">
               <div class="testimonial-slide__img">
-                <img src="user-profile_v=1725257626.png" loading="lazy"
+                <img src="uploads/user-profile_v=1725257626.png" loading="lazy"
                   alt="">
               </div>
               <div class="testimonial-slide__name">
@@ -11291,7 +11286,7 @@ if (file_exists($config_path_local)) {
 
             <div class="testimonial-slide">
               <div class="testimonial-slide__img">
-                <img src="user-profile_v=1725257626.png" loading="lazy"
+                <img src="uploads/user-profile_v=1725257626.png" loading="lazy"
                   alt="">
               </div>
               <div class="testimonial-slide__name">
@@ -11307,7 +11302,7 @@ if (file_exists($config_path_local)) {
 
             <div class="testimonial-slide">
               <div class="testimonial-slide__img">
-                <img src="user-profile_v=1725257626.png" loading="lazy"
+                <img src="uploads/user-profile_v=1725257626.png" loading="lazy"
                   alt="">
               </div>
               <div class="testimonial-slide__name">
@@ -11324,7 +11319,7 @@ if (file_exists($config_path_local)) {
 
             <div class="testimonial-slide">
               <div class="testimonial-slide__img">
-                <img src="user-profile_v=1725257626.png" loading="lazy"
+                <img src="uploads/user-profile_v=1725257626.png" loading="lazy"
                   alt="">
               </div>
               <div class="testimonial-slide__name">
@@ -11339,7 +11334,7 @@ if (file_exists($config_path_local)) {
 
             <div class="testimonial-slide">
               <div class="testimonial-slide__img">
-                <img src="user-profile_v=1725257626.png" loading="lazy"
+                <img src="uploads/user-profile_v=1725257626.png" loading="lazy"
                   alt="">
               </div>
               <div class="testimonial-slide__name">
@@ -11354,7 +11349,7 @@ if (file_exists($config_path_local)) {
 
             <div class="testimonial-slide">
               <div class="testimonial-slide__img">
-                <img src="user-profile_v=1725257626.png" loading="lazy"
+                <img src="uploads/user-profile_v=1725257626.png" loading="lazy"
                   alt="">
               </div>
               <div class="testimonial-slide__name">
@@ -11370,7 +11365,7 @@ if (file_exists($config_path_local)) {
 
             <div class="testimonial-slide">
               <div class="testimonial-slide__img">
-                <img src="user-profile_v=1725257626.png" loading="lazy"
+                <img src="uploads/user-profile_v=1725257626.png" loading="lazy"
                   alt="">
               </div>
               <div class="testimonial-slide__name">
@@ -11385,7 +11380,7 @@ if (file_exists($config_path_local)) {
 
             <div class="testimonial-slide">
               <div class="testimonial-slide__img">
-                <img src="user-profile_v=1725257626.png" loading="lazy"
+                <img src="uploads/user-profile_v=1725257626.png" loading="lazy"
                   alt="">
               </div>
               <div class="testimonial-slide__name">
@@ -11403,7 +11398,7 @@ if (file_exists($config_path_local)) {
 
             <div class="testimonial-slide">
               <div class="testimonial-slide__img">
-                <img src="user-profile_v=1725257626.png" loading="lazy"
+                <img src="uploads/user-profile_v=1725257626.png" loading="lazy"
                   alt="">
               </div>
               <div class="testimonial-slide__name">
@@ -11455,7 +11450,7 @@ if (file_exists($config_path_local)) {
             </div>
           </div>
           <div class="subscription-banner__featured-img">
-            <img src="banner_image_v=1725267995.png" loading="lazy"
+            <img src="uploads/banner_image_v=1725267995.png" loading="lazy"
               alt="">
           </div>
           <div class="eclipse-pattern left">
@@ -11597,7 +11592,7 @@ if (file_exists($config_path_local)) {
       <div class="footer-store-detail d-flex justify-content-between">
         <div class="footer-logo">
           <a href="/">
-            <img src="Maharaja Supermarket-white_v=1716044168.png"
+            <img src="uploads/Maharaja Supermarket-white_v=1716044168.png"
               loading="lazy" alt="footer logo">
           </a>
         </div>
@@ -11792,15 +11787,15 @@ if (file_exists($config_path_local)) {
           </div>
           <div class="col-12 col-md-6">
             <div class="supported-payment-providers">
-              <img src="Frame_7628_thumb_v=1716135418.svg"
+              <img src="uploads/Frame_7628_thumb_v=1716135418.svg"
                 loading="lazy" alt="payment provider">
-              <img src="Frame_7627_thumb_v=1716135435.svg"
+              <img src="uploads/Frame_7627_thumb_v=1716135435.svg"
                 loading="lazy" alt="payment provider">
-              <img src="Frame_7626_thumb_v=1716135441.svg"
+              <img src="uploads/Frame_7626_thumb_v=1716135441.svg"
                 loading="lazy" alt="payment provider">
-              <img src="przelewy_thumb_v=1728244570.svg" loading="lazy"
+              <img src="uploads/przelewy_thumb_v=1728244570.svg" loading="lazy"
                 alt="payment provider">
-              <img src="blik_thumb_v=1728244592.svg" loading="lazy"
+              <img src="uploads/blik_thumb_v=1728244592.svg" loading="lazy"
                 alt="payment provider">
             </div>
           </div>
@@ -11955,11 +11950,11 @@ if (file_exists($config_path_local)) {
     defer=""></script>
   <script src="https://ajax.aspnetcdn.com/ajax/jquery.templates/beta1/jquery.tmpl.min.js" async=""></script>
   <script
-    src="https://maharajasupermarket.ro/cdn/shop/t/7/assets/jquery.products.min_v%3D88194351912067139891742289479.js"
+    src="/cdn/shop/t/7/assets/jquery.products.min_v%3D88194351912067139891742289479.js"
     async=""></script>
-  <script src="https://maharajasupermarket.ro/cdn/shop/t/7/assets/product-form_v%3D36638810988477619121742289479.js"
+  <script src="/cdn/shop/t/7/assets/product-form_v%3D36638810988477619121742289479.js"
     async=""></script>
-  <script src="https://maharajasupermarket.ro/cdn/shop/t/7/assets/wishlist_v%3D123468706697186557161742289479.js"
+  <script src="/cdn/shop/t/7/assets/wishlist_v%3D123468706697186557161742289479.js"
     async=""></script>
   <script>
     jQuery(window).on('load', function () {

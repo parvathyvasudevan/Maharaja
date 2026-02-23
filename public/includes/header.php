@@ -2,6 +2,7 @@
 if (session_status() === PHP_SESSION_NONE) {
   session_start();
 }
+require_once __DIR__ . '/../../includes/security.php';
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
@@ -18,6 +19,155 @@ if (!isset($link)) {
   // 2. Public config (../config/database.php)
   elseif (file_exists(__DIR__ . '/../config/database.php')) {
     require_once __DIR__ . '/../config/database.php';
+  }
+}
+
+// Calculate Cart Items and Subtotal
+$total_cart_items = 0;
+$header_cart_subtotal = 0;
+$header_cart_details = [];
+
+if (isset($_SESSION['cart']) && is_array($_SESSION['cart']) && !empty($_SESSION['cart'])) {
+  $total_cart_items = !empty($_SESSION['cart']) ? array_sum($_SESSION['cart']) : 0;
+?>
+<style>
+/* Fix for selective checkout checkboxes being hidden by global CSS */
+input[type="checkbox"].cart-item-checkbox, 
+.mini-cart-selection input[type="checkbox"] {
+    -webkit-appearance: checkbox !important;
+    -moz-appearance: checkbox !important;
+    appearance: checkbox !important;
+    width: 20px !important;
+    height: 20px !important;
+    cursor: pointer;
+    vertical-align: middle;
+    accent-color: #6ea622; /* Matches theme green */
+    position: relative;
+    z-index: 5;
+    margin: 0;
+}
+.mini-cart-selection {
+    display: flex;
+    align-items: center;
+    padding-right: 12px;
+}
+/* Enhanced Profile Dropdown */
+.header-sign-in-up__group .dropdown-menu {
+    border: none;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    border-radius: 12px;
+    padding: 15px;
+    min-width: 220px;
+    margin-top: 10px !important;
+    background: #fff !important;
+    z-index: 9999;
+}
+.header-sign-in-up__group .dropdown-item {
+    padding: 10px 15px;
+    font-weight: 500;
+    color: #333;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+.header-sign-in-up__group .dropdown-item:hover {
+    background-color: #f8f9fa;
+    color: #70AB22;
+    padding-left: 20px;
+}
+.header-sign-in-up__group .dropdown-divider {
+    margin: 10px 0;
+    border-top: 1px solid #eee;
+}
+.header-sign-in-up__group .dropdown-toggle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    font-weight: 600;
+    position: relative;
+    cursor: pointer;
+}
+/* Caret icon */
+.header-sign-in-up__group .dropdown-toggle::after {
+    content: "";
+    display: inline-block;
+    margin-left: 8px;
+    vertical-align: middle;
+    border-top: 5px solid;
+    border-right: 5px solid transparent;
+    border-left: 5px solid transparent;
+}
+/* No hover triggers - only show on click (Bootstrap .show class) */
+.header-sign-in-up__group .dropdown-menu {
+    display: none;
+    position: absolute;
+    right: 0;
+    left: auto;
+}
+.header-sign-in-up__group .dropdown-menu.show {
+    display: block !important;
+}
+/* Fixed placement dropdown styles - No transitions */
+.header-sign-in-up__group .dropdown-menu {
+    border: none;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.2) !important;
+    border-radius: 12px;
+    padding: 20px;
+    min-width: 240px;
+    margin-top: 10px !important;
+    background: #fff !important;
+    z-index: 10001;
+    transform: none !important;
+}
+</style>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const profileToggle = document.getElementById('profileDropdown');
+    const profileMenu = profileToggle ? profileToggle.nextElementSibling : null;
+
+    if (profileToggle && profileMenu) {
+        profileToggle.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            profileMenu.classList.toggle('show');
+        });
+
+        // Close when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!profileToggle.contains(e.target) && !profileMenu.contains(e.target)) {
+                profileMenu.classList.remove('show');
+            }
+        });
+    }
+});
+</script>
+<?php
+  $ids = array_keys($_SESSION['cart']);
+  $placeholders = str_repeat('?,', count($ids) - 1) . '?';
+
+  // Try to use $pdo if available, otherwise use $link (fallback)
+  $db_conn = $pdo ?? $link ?? null;
+  
+  if ($db_conn) {
+    $title_col = (isset($_SESSION['lang']) && $_SESSION['lang'] == 'ro') ? 'title_ro' : 'title_en';
+    // Fallback if the specific columns don't exist yet (based on previous knowledge items)
+    // Actually, let's use the helper if available or a safe guess
+    $title_col = 'title_' . ($_SESSION['lang'] ?? 'en');
+    
+    foreach ($_SESSION['cart'] as $pid => $qty) {
+      // $total_cart_items is already set via array_sum above, no need to add again
+      
+      $stmt = $db_conn->prepare("SELECT id, price, image, title_en, title_ro FROM products WHERE id = ?");
+      $stmt->execute([$pid]);
+      $product = $stmt->fetch();
+      
+      if ($product) {
+        $product['qty'] = $qty;
+        $product['line_total'] = $product['price'] * $qty;
+        $header_cart_subtotal += $product['line_total'];
+        $header_cart_details[] = $product;
+      }
+    }
   }
 }
 ?>
@@ -190,7 +340,7 @@ if (!isset($link)) {
     .btn,
     a,
     button,
-    input,
+    input:not([type=checkbox]):not([type=radio]),
     select {
       text-decoration: none;
       -webkit-text-decoration-skip: objects;
@@ -429,9 +579,7 @@ if (!isset($link)) {
     }
 
     .form-control,
-    input:not([type=checkbox]),
-    input:not([type=radio]),
-    input:not([type=submit]),
+    input:not([type=checkbox]):not([type=radio]):not([type=submit]),
     select {
       position: relative;
       border: 1px solid var(--border-color);
@@ -2696,31 +2844,7 @@ if (!isset($link)) {
     <script src="details-disclosure_v=118626640824924522881742289478.js" defer="defer"></script>
     <script src="details-modal_v=159713964493321545491742289478.js" defer="defer"></script>
 
-    <div class="header__announcement-bar">
-      <div class="container">
-        <form method="post" action="/localization" id="language-form" accept-charset="UTF-8"
-          class="shopify-localization-form" enctype="multipart/form-data"><input type="hidden" name="form_type"
-            value="localization"><input type="hidden" name="utf8" value="✓"><input type="hidden" name="_method"
-            value="put"><input type="hidden" name="return_to" value="/">
-          <div class="locale-selector__wrap">
-            <h2 class="visually-hidden" id="language-label">Language</h2>
-            <select name="locale_code" aria-labelledby="language-label"
-              onchange="if(this.value === 'ro') window.location.href='ro.html'">
-              <option value="en" lang="en" selected="">
-                En
-              </option>
-              <option value="ro" lang="ro">
-                Ro
-              </option>
-            </select>
-            <svg xmlns="http://www.w3.org/2000/svg" width="10" height="6" viewBox="0 0 10 6" fill="none">
-              <path d="M9 1.00003C9 1.00003 6.05407 5 5 5C3.94587 5 1 1 1 1" stroke="#5C5C5C" stroke-width="1.5"
-                stroke-linecap="round" stroke-linejoin="round"></path>
-            </svg>
-
-
-          </div>
-        </form>
+    <div class="header__announcement-bar" style="display:none;">
         <div class="announcement-bar-mid-col">
 
           <a class="hot-line-num" href="tel:+40-536 503 097">
@@ -2756,32 +2880,6 @@ if (!isset($link)) {
 
         </div>
 
-        <div class="header-sign-in-up__group">
-          <?php if (isset($_SESSION['customer_id'])): ?>
-            <div class="dropdown">
-              <a href="#" class="btn btn--secondary btn--sm dropdown-toggle" data-bs-toggle="dropdown">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                  class="feather feather-user">
-                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                  <circle cx="12" cy="7" r="4"></circle>
-                </svg>
-                Hi, <?php echo htmlspecialchars(explode(' ', $_SESSION['customer_name'])[0]); ?>
-              </a>
-              <ul class="dropdown-menu" style="right:0; left:auto;">
-                <li><a class="dropdown-item" href="account/orders.php">My Orders</a></li>
-                <li>
-                  <hr class="dropdown-divider">
-                </li>
-                <li><a class="dropdown-item" href="account/logout.php">Logout</a></li>
-              </ul>
-            </div>
-          <?php else: ?>
-            <a href="account/login.php" class="btn btn--secondary btn--sm">Sign In</a>
-            <a href="account/register.php" class="btn btn--primary btn--sm">Sign Up</a>
-          <?php endif; ?>
-        </div>
-
       </div>
     </div>
     <div class="top-header-wrapper sticky_header" id="header-sticky">
@@ -2790,15 +2888,15 @@ if (!isset($link)) {
           <div class="logo-col">
             <h1>
               <a href="/">
-                <img src="maharaja_logo.png" loading="eager" alt="Nav brand">
+                <img src="/uploads/maharaja_logo.png" loading="eager" alt="Nav brand">
               </a>
             </h1>
           </div>
           <ul class="header__top-navigation">
-            <li><a href="shop.php?category=promotion">MEGA SALE!</a></li>
-            <li><a href="contact.php">Contact Us</a></li>
+            <li><a href="/shop.php?category=promotion">MEGA SALE!</a></li>
+            <li><a href="/contact.php">Contact Us</a></li>
             <li><a href="/pages/faq">FAQ</a></li>
-            <li><a href="shop.php?category=shop-all">Shop All</a></li>
+            <li><a href="/shop.php?category=shop-all">Shop All</a></li>
 
           </ul>
           <div class="right-side-header">
@@ -2855,6 +2953,54 @@ if (!isset($link)) {
                   </a>
                 </li>
 
+                <li class="lang-switcher-nav ms-2" style="list-style:none;">
+                  <?php
+                    $cur_lang = $_SESSION['lang'] ?? 'en';
+                    $cur_url  = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS']==='on' ? 'https' : 'http')
+                              . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+                  ?>
+                  <div style="display:flex;align-items:center;gap:4px;font-size:13px;font-weight:700;">
+                    <a href="/lang_switch.php?lang=en&back=<?php echo urlencode($cur_url); ?>"
+                       style="padding:4px 9px;border-radius:6px;text-decoration:none;transition:all .2s;
+                              <?php echo $cur_lang==='en' ? 'background:#6ea622;color:#fff;' : 'color:#555;'; ?>">EN</a>
+                    <span style="color:#ccc;">|</span>
+                    <a href="/lang_switch.php?lang=ro&back=<?php echo urlencode($cur_url); ?>"
+                       style="padding:4px 9px;border-radius:6px;text-decoration:none;transition:all .2s;
+                              <?php echo $cur_lang==='ro' ? 'background:#6ea622;color:#fff;' : 'color:#555;'; ?>">RO</a>
+                  </div>
+                </li>
+
+                <li class="profile-header ms-3">
+                  <div class="header-sign-in-up__group">
+                    <?php if (isset($_SESSION['customer_id'])): ?>
+                      <div class="dropdown">
+                        <a class="dropdown-toggle" id="profileDropdown" style="color: #333; text-decoration: none; cursor: pointer; display: flex; align-items: center; gap: 8px;">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="feather feather-user">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                          </svg>
+                          <span style="font-weight: 600; font-size: 15px;">Hi, <?php echo htmlspecialchars(explode(' ', $_SESSION['customer_name'] ?? '')[0]); ?></span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
+                          <li><a class="dropdown-item" href="account/profile.php">My Profile</a></li>
+                          <li><a class="dropdown-item" href="account/orders.php">My Orders</a></li>
+                          <li>
+                            <hr class="dropdown-divider">
+                          </li>
+                          <li><a class="dropdown-item" href="account/logout.php" style="color: #dc3545;">Logout</a></li>
+                        </ul>
+                      </div>
+                    <?php else: ?>
+                      <div class="d-flex gap-2">
+                        <a href="/account/login.php" class="btn btn--secondary btn--sm">Sign In</a>
+                        <a href="/account/register.php" class="btn btn--primary btn--sm">Sign Up</a>
+                      </div>
+                    <?php endif; ?>
+                  </div>
+                </li>
+
                 <li class="cart-header">
                   <a class="closecart">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
@@ -2875,9 +3021,9 @@ if (!isset($link)) {
                           stroke="currentColor" stroke-width="1.5"></path>
                       </svg>
 
-                      <span class="count">0</span>
+                      <span class="count"><?php echo $total_cart_items; ?></span>
                     </a>
-                    <webi-cart-items class="cartDrawer is-empty">
+                    <webi-cart-items class="cartDrawer <?php echo ($total_cart_items == 0) ? 'is-empty' : ''; ?>">
                       <div class="mini-cart-header">
                         <h4>
                           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 20 20"
@@ -2891,7 +3037,7 @@ if (!isset($link)) {
                           </svg>
                           <span>My Cart</span>
                         </h4>
-                        <div class="cart-tottl-itm">0 Items</div>
+                        <div class="cart-tottl-itm"><?php echo $total_cart_items; ?> Items</div>
                       </div>
                       <div class="cart__warnings">
                         <svg id="icon-cart-emty" widht="50" height="50" xmlns="http://www.w3.org/2000/svg"
@@ -2903,15 +3049,42 @@ if (!isset($link)) {
                         <h5 class="cart__empty-text">Your cart is empty</h5>
                       </div>
                       <div id="cart-body" class="mini-cart-has-item">
-                        <form action="/cart" class="mini-cart-body" method="post" id="cart">
+                        <form action="checkout.php" class="mini-cart-body" method="post" id="cart">
                           <div id="webi-main-cart-items" data-id="header">
-                            <div class="js-contents"></div>
+                            <div class="js-contents">
+                              <?php if (!empty($header_cart_details)): ?>
+                                <ul class="mini-cart-list" style="padding: 0; margin: 0;">
+                                    <?php foreach ($header_cart_details as $item): 
+                                      $item_title = (isset($_SESSION['lang']) && $_SESSION['lang'] == 'ro') ? $item['title_ro'] : $item['title_en'];
+                                      $item_img = !empty($item['image']) ? 'uploads/'.$item['image'] : 'https://placehold.co/50x50';
+                                    ?>
+                                      <li class="mini-cart-item d-flex align-items-center mb-3" style="gap: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px;">
+                                        <div class="mini-cart-selection">
+                                          <input type="checkbox" name="selected_items[]" value="<?php echo $item['id']; ?>" checked 
+                                                 class="mini-cart-item-checkbox" 
+                                                 data-price="<?php echo $item['price']; ?>" 
+                                                 data-qty="<?php echo $item['qty']; ?>">
+                                        </div>
+                                        <div class="mini-cart-img" style="width: 60px; height: 60px; flex-shrink: 0;">
+                                        <img src="<?php echo htmlspecialchars($item_img); ?>" alt="<?php echo htmlspecialchars($item_title); ?>" style="width: 100%; height: 100%; object-fit: contain;">
+                                      </div>
+                                      <div class="mini-cart-info" style="flex-grow: 1;">
+                                        <h6 style="font-size: 14px; margin: 0; font-weight: 600;"><?php echo htmlspecialchars($item_title); ?></h6>
+                                        <div style="font-size: 13px; color: #666;">
+                                          <?php echo $item['qty']; ?> x <?php echo format_currency($item['price']); ?>
+                                        </div>
+                                      </div>
+                                    </li>
+                                  <?php endforeach; ?>
+                                </ul>
+                              <?php endif; ?>
+                            </div>
                           </div>
                           <p class="hidden" id="webi-cart-live-region-text" aria-live="polite" role="status"></p>
                           <p class="hidden" id="shopping-cart-line-item-status" aria-live="polite" aria-hidden="true"
                             role="status">Loading...</p>
                         </form>
-                        <div class="webi-mini-cart-footer  is-empty" id="webi-main-cart-footer" data-id="header">
+                        <div class="webi-mini-cart-footer <?php echo ($total_cart_items == 0) ? 'is-empty' : ''; ?>" id="webi-main-cart-footer" data-id="header">
                           <div class="cart__blocks">
                             <div class="js-contents">
                               <div class="coupan-txt">
@@ -2964,9 +3137,8 @@ if (!isset($link)) {
                               </div>
                               <div class="mini-cart-footer-total-row d-flex align-items-center justify-content-between">
                                 <div class="mini-total-lbl">Subtotal :</div>
-                                <div class="mini-total-price"><span class="money"> Lei0.00 RON</span></div>
+                                <div class="mini-total-price"><span class="money" id="mini-cart-subtotal-val"><?php echo format_currency($header_cart_subtotal); ?></span></div>
                               </div>
-                              <div></div>
                             </div>
 
                             <div class="cart__ctas mini-cart__ctas">
@@ -2974,8 +3146,7 @@ if (!isset($link)) {
                                 <button type="submit" class="cart__update-button button button--secondary"
                                   form="cart">Update</button>
                               </noscript>
-                              <button type="submit" id="checkout" class="btn btn--primary btn--arrow" name="checkout"
-                                form="cart">
+                              <button type="submit" id="checkout" class="btn btn--primary btn--arrow" name="checkout" form="cart">
                                 Proceed to checkout
 
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
@@ -2987,7 +3158,7 @@ if (!isset($link)) {
                                 </svg>
 
                               </button>
-                              <a href="cart.php" class="btn btn--secondary btn--arrow" form="cart">
+                              <a href="cart.php" class="btn btn--secondary btn--arrow">
                                 View Cart
 
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
@@ -3003,6 +3174,75 @@ if (!isset($link)) {
                           </div>
                         </div>
                       </div>
+                    <script>
+                    (function() {
+                        function updateMiniSubtotal() {
+                            const container = document.querySelector('.cartDrawer');
+                            if (!container) return;
+                            
+                            const subtotalVal = container.querySelector('#mini-cart-subtotal-val');
+                            if (!subtotalVal) return;
+
+                            const checkboxes = container.querySelectorAll('.mini-cart-item-checkbox');
+                            let total = 0;
+                            let checkedCount = 0;
+                            
+                            checkboxes.forEach(cb => {
+                                if (cb.checked) {
+                                    const price = parseFloat(cb.getAttribute('data-price')) || 0;
+                                    const qty = parseInt(cb.getAttribute('data-qty')) || 0;
+                                    total += price * qty;
+                                    checkedCount++;
+                                }
+                            });
+                            
+                            subtotalVal.textContent = total.toFixed(2) + ' RON';
+                            
+                            const checkoutBtn = document.getElementById('checkout');
+                            if (checkoutBtn) {
+                                checkoutBtn.disabled = (checkedCount === 0);
+                                checkoutBtn.style.opacity = (checkedCount === 0) ? '0.5' : '1';
+                                checkoutBtn.style.cursor = (checkedCount === 0) ? 'not-allowed' : 'pointer';
+                            }
+                        }
+
+                        document.addEventListener('change', function(e) {
+                            if (e.target && e.target.classList.contains('mini-cart-item-checkbox')) {
+                                updateMiniSubtotal();
+                            }
+                        });
+
+                        const observer = new MutationObserver(function(mutations) {
+                            observer.disconnect();
+                            updateMiniSubtotal();
+                            const cartBody = document.querySelector('.cartDrawer');
+                            if (cartBody) {
+                                observer.observe(cartBody, { childList: true, subtree: true });
+                            }
+                        });
+                        
+                        document.addEventListener('DOMContentLoaded', function() {
+                            const cartBody = document.querySelector('.cartDrawer');
+                            if (cartBody) {
+                                observer.observe(cartBody, { childList: true, subtree: true });
+                            }
+                            updateMiniSubtotal();
+                        });
+
+                        document.addEventListener('click', function(e) {
+                            if (e.target && e.target.id === 'checkout' || e.target.closest('#checkout')) {
+                                const btn = e.target.id === 'checkout' ? e.target : e.target.closest('#checkout');
+                                if (btn.tagName === 'BUTTON' && !btn.disabled) {
+                                    const form = document.getElementById('cart');
+                                    if (form) {
+                                        e.preventDefault();
+                                        form.submit();
+                                    }
+                                }
+                            }
+                        });
+                    })();
+                    </script>
                     </webi-cart-items>
                   </div>
                 </li>
@@ -3211,7 +3451,7 @@ if (!isset($link)) {
 
                     <li class="">
                       <a
-                        href="https://maharajasupermarket.ro/collections/shop-all?filter.v.price.gte=&filter.v.price.lte=&filter.p.vendor=Double+Horse&sort_by=best-selling">Double
+                        href="shop.php?q=Double+Horse">Double
                         Horse</a>
 
                     </li>
@@ -3219,14 +3459,14 @@ if (!isset($link)) {
 
                     <li class="">
                       <a
-                        href="https://maharajasupermarket.ro/collections/shop-all?filter.v.price.gte=&filter.v.price.lte=&filter.p.vendor=Sweekar&sort_by=best-selling">Sweekar</a>
+                        href="shop.php?q=Sweekar">Sweekar</a>
 
                     </li>
 
 
                     <li class="">
                       <a
-                        href="https://maharajasupermarket.ro/collections/shop-all?filter.v.price.gte=&filter.v.price.lte=&filter.p.vendor=Kitchen+Treasures&sort_by=best-selling">Kitchen
+                        href="shop.php?q=Kitchen+Treasures">Kitchen
                         Treasures</a>
 
                     </li>
@@ -3234,14 +3474,14 @@ if (!isset($link)) {
 
                     <li class="">
                       <a
-                        href="https://maharajasupermarket.ro/collections/shop-all?filter.v.price.gte=&filter.v.price.lte=&filter.p.vendor=Patanjali&sort_by=best-selling">Patanjali</a>
+                        href="shop.php?q=Patanjali">Patanjali</a>
 
                     </li>
 
 
                     <li class="">
                       <a
-                        href="https://maharajasupermarket.ro/collections/shop-all?filter.v.price.gte=&filter.v.price.lte=&filter.p.vendor=Organic+India&sort_by=best-selling">Organic
+                        href="shop.php?q=Organic+India">Organic
                         India</a>
 
                     </li>
@@ -3255,7 +3495,7 @@ if (!isset($link)) {
 
                     <li class="">
                       <a
-                        href="https://maharajasupermarket.ro/collections/shop-all?filter.v.price.gte=&filter.v.price.lte=&filter.p.vendor=JFK&sort_by=best-selling">JFK
+                        href="shop.php?q=JFK">JFK
                         Indian Coffee</a>
 
                     </li>
@@ -5610,7 +5850,7 @@ if (!isset($link)) {
 
           <li class="mobile-item">
             <a class="acnav-label " href="/pages/contact ">
-              Contact Us
+              <?php echo $lang['contact_us']; ?>
               <svg class="menu-open-arrow" xmlns="http://www.w3.org/2000/svg" width="20" height="11"
                 viewBox="0 0 20 11">
                 <path fill="#24272a"
@@ -5656,7 +5896,7 @@ if (!isset($link)) {
 
           <li class="mobile-item">
             <a class="acnav-label " href="shop.php?category=shop-all ">
-              All Products
+              <?php echo $lang['all_products']; ?>
               <svg class="menu-open-arrow" xmlns="http://www.w3.org/2000/svg" width="20" height="11"
                 viewBox="0 0 20 11">
                 <path fill="#24272a"
@@ -5679,7 +5919,7 @@ if (!isset($link)) {
 
           <li class="mobile-item has-children">
             <a class="acnav-label " href=" javascript: ">
-              Categories
+              <?php echo $lang['categories']; ?>
               <svg class="menu-open-arrow" xmlns="http://www.w3.org/2000/svg" width="20" height="11"
                 viewBox="0 0 20 11">
                 <path fill="#24272a"
@@ -5698,7 +5938,7 @@ if (!isset($link)) {
 
 
               <li class="menu-h-link ">
-                <a class="acnav-label" href="shop.php?category=promotion">Special Offers
+                <a class="acnav-label" href="shop.php?category=promotion"><?php echo $lang['special_offer'] ?? 'Special Offers'; ?>
 
                 </a>
 
@@ -5788,8 +6028,7 @@ if (!isset($link)) {
 
 
               <li class="menu-h-link ">
-                <a class="acnav-label" href="shop.php?category=default-category-snacks-and-savouries">Snacks and
-                  Savouries
+                <a class="acnav-label" href="shop.php?category=default-category-snacks-and-savouries"><?php echo $lang['snacks_savouries'] ?? 'Snacks and Savouries'; ?>
 
                 </a>
 
@@ -5797,7 +6036,7 @@ if (!isset($link)) {
 
 
               <li class="menu-h-link ">
-                <a class="acnav-label" href="shop.php?category=frozen-food">Frozen Food
+                <a class="acnav-label" href="shop.php?category=frozen-food"><?php echo $lang['frozen_food']; ?>
 
                 </a>
 
@@ -5805,7 +6044,7 @@ if (!isset($link)) {
 
 
               <li class="menu-h-link ">
-                <a class="acnav-label" href="shop.php?category=Maharaja Supermarket-shop-instant-mix">Instant Mix
+                <a class="acnav-label" href="shop.php?category=Maharaja Supermarket-shop-instant-mix"><?php echo $lang['instant_mix']; ?>
 
                 </a>
 

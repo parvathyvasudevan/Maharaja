@@ -1,0 +1,5 @@
+# Block direct HTTP access to admin include files
+# These are server-side partials, never directly accessible
+
+Order Deny,Allow
+Deny from all

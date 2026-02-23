@@ -1,0 +1,5 @@
+# Block direct HTTP access to this directory
+# PHP includes must only be accessed via include/require from other PHP files
+
+Order Deny,Allow
+Deny from all

@@ -1,4 +1,9 @@
-<?php
+/**
+ * Stripe Webhook Handler
+ * 
+ * Path: api/stripe_webhook.php
+ * Part of: Maharaja Supermarket API
+ */
 require_once __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/../config/stripe.php';
 require_once __DIR__ . '/stripe_helpers.php';

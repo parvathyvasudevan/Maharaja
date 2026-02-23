@@ -1,5 +1,9 @@
-<?php
-session_start();
+/**
+ * Customer Login Page
+ * 
+ * Path: public/account/login.php
+ * Part of: Maharaja Supermarket Customer Portal
+ */
 // Enable error reporting for debugging 500 errors
 ini_set('display_errors', 1);
 error_reporting(E_ALL);

@@ -1,63 +1,65 @@
-<?php
-session_start();
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
-
-$config_path_local = __DIR__ . '/config/database.php';
-if (file_exists($config_path_local)) {
-  require_once $config_path_local;
-} else {
-  require_once __DIR__ . '/../config/database.php';
-}
+/**
+ * Shopping Cart Page
+ * 
+ * Path: public/cart.php
+ * Part of: Maharaja Supermarket
+ */
+require_once __DIR__ . '/../includes/init_lang.php';
+require_once __DIR__ . '/../includes/db.php';
+require_once __DIR__ . '/../includes/helpers.php';
+require_once __DIR__ . '/../includes/security.php';
 
 $cart_items = array();
 $total_price = 0;
+$title_col = get_col('title');
 
 // Handle Remove
 if (isset($_GET['remove'])) {
-  $remove_id = intval($_GET['remove']);
-  if (isset($_SESSION['cart'][$remove_id])) {
-    unset($_SESSION['cart'][$remove_id]);
-  }
-  header("Location: cart.php");
-  exit;
+    $remove_id = intval($_GET['remove']);
+    if (isset($_SESSION['cart'][$remove_id])) {
+        unset($_SESSION['cart'][$remove_id]);
+    }
+    header("Location: cart.php");
+    exit;
 }
 
-// Handle Update Quantity (optional, good for professionalism)
+// Handle Update Quantity
 if (isset($_POST['update_cart'])) {
-  foreach ($_POST['qty'] as $pid => $qty) {
-    $pid = intval($pid);
-    $qty = intval($qty);
-    if ($qty > 0) {
-      $_SESSION['cart'][$pid] = $qty;
-    } else {
-      unset($_SESSION['cart'][$pid]);
+    foreach ($_POST['qty'] as $pid => $qty) {
+        $pid = intval($pid);
+        $qty = intval($qty);
+        
+        // Stock check
+        $stmt = $pdo->prepare("SELECT stock FROM products WHERE id = ?");
+        $stmt->execute([$pid]);
+        $stock = $stmt->fetchColumn();
+
+        if ($qty > 0) {
+            $_SESSION['cart'][$pid] = min($qty, $stock);
+        } else {
+            unset($_SESSION['cart'][$pid]);
+        }
     }
-  }
-  header("Location: cart.php");
-  exit;
+    header("Location: cart.php");
+    exit;
 }
 
 // Fetch Items
 if (isset($_SESSION['cart']) && !empty($_SESSION['cart'])) {
-  $ids_arr = array();
-  foreach ($_SESSION['cart'] as $pid => $qty) {
-    $ids_arr[] = intval($pid);
-  }
-
-  if (!empty($ids_arr)) {
-    $ids = implode(',', $ids_arr);
-    $sql = "SELECT * FROM products WHERE id IN ($ids)";
-    $result = mysqli_query($link, $sql);
-    if ($result) {
-      while ($row = mysqli_fetch_assoc($result)) {
-        $row['qty'] = $_SESSION['cart'][$row['id']];
-        $row['subtotal'] = $row['price'] * $row['qty'];
-        $total_price += $row['subtotal'];
-        $cart_items[] = $row;
-      }
+    $ids = array_keys($_SESSION['cart']);
+    if (!empty($ids)) {
+        $placeholders = str_repeat('?,', count($ids) - 1) . '?';
+        $sql = "SELECT * FROM products WHERE id IN ($placeholders)";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute($ids);
+        
+        while ($row = $stmt->fetch()) {
+            $row['qty'] = $_SESSION['cart'][$row['id']];
+            $row['subtotal'] = $row['price'] * $row['qty'];
+            $total_price += $row['subtotal'];
+            $cart_items[] = $row;
+        }
     }
-  }
 }
 ?>
 <?php include 'includes/header.php'; ?>
@@ -68,10 +70,12 @@ if (isset($_SESSION['cart']) && !empty($_SESSION['cart'])) {
 
     <?php if (!empty($cart_items)): ?>
       <form action="cart.php" method="POST">
+        <?php echo csrf_field(); ?>
         <div class="table-responsive">
           <table class="table table-bordered">
             <thead style="background: #f4f4f4;">
               <tr>
+                <th style="width: 50px;"></th>
                 <th style="width: 100px;">Image</th>
                 <th>Product</th>
                 <th style="width: 150px;">Price</th>
@@ -85,28 +89,34 @@ if (isset($_SESSION['cart']) && !empty($_SESSION['cart'])) {
                 $image_path = !empty($item['image']) ? 'uploads/' . $item['image'] : 'https://placehold.co/100x100?text=No+Img';
                 ?>
                 <tr>
+                  <td style="vertical-align: middle; text-align: center;">
+                    <input type="checkbox" name="selected_items[]" value="<?php echo $item['id']; ?>" checked 
+                           class="cart-item-checkbox" 
+                           data-price="<?php echo $item['price']; ?>" 
+                           data-qty="<?php echo $item['qty']; ?>">
+                  </td>
                   <td>
                     <img src="<?php echo htmlspecialchars($image_path); ?>"
-                      alt="<?php echo htmlspecialchars($item['title']); ?>"
+                      alt="<?php echo htmlspecialchars($item[$title_col]); ?>"
                       style="width: 80px; height: 80px; object-fit: contain;">
                   </td>
                   <td style="vertical-align: middle;">
                     <a href="product.php?id=<?php echo $item['id']; ?>"
-                      style="font-weight: 600; color: #333;"><?php echo htmlspecialchars($item['title']); ?></a>
+                      style="font-weight: 600; color: #333;"><?php echo htmlspecialchars($item[$title_col]); ?></a>
                   </td>
                   <td style="vertical-align: middle;">
-                    <?php echo number_format($item['price'], 2); ?> RON
+                    <?php echo format_currency($item['price']); ?>
                   </td>
                   <td style="vertical-align: middle;">
-                    <input type="number" name="qty[<?php echo $item['id']; ?>]" value="<?php echo $item['qty']; ?>" min="1"
-                      class="form-control text-center">
+                    <input type="number" name="qty[<?php echo $item['id']; ?>]" value="<?php echo $item['qty']; ?>" min="1" max="<?php echo $item['stock']; ?>"
+                      class="form-control text-center cart-qty-input" data-id="<?php echo $item['id']; ?>">
                   </td>
                   <td style="vertical-align: middle; font-weight: 700; color: #6ea622;">
-                    <?php echo number_format($item['subtotal'], 2); ?> RON
+                    <?php echo format_currency($item['subtotal']); ?>
                   </td>
                   <td style="vertical-align: middle; text-align: center;">
                     <a href="cart.php?remove=<?php echo $item['id']; ?>" class="btn btn-sm btn-danger"
-                      onclick="return confirm('Are you sure?')"
+                      onclick="return confirm('<?php echo $lang['are_you_sure'] ?? 'Are you sure?'; ?>')"
                       style="color: red; background: none; border: none; font-size: 20px;">&times;</a>
                   </td>
                 </tr>
@@ -117,18 +127,57 @@ if (isset($_SESSION['cart']) && !empty($_SESSION['cart'])) {
 
         <div class="row mt-4">
           <div class="col-12 col-md-6">
-            <a href="shop.php" class="btn btn--secondary">Continue Shopping</a>
+            <a href="shop.php" class="btn btn--secondary"><?php echo $lang['continue_shopping'] ?? 'Continue Shopping'; ?></a>
           </div>
           <div class="col-12 col-md-6 text-md-end">
-            <button type="submit" name="update_cart" class="btn btn--white me-2">Update Cart</button>
-            <a href="checkout.php" class="btn btn--primary btn--lg">Proceed to Checkout</a>
+            <button type="submit" name="update_cart" class="btn btn--white me-2"><?php echo $lang['update_cart'] ?? 'Update Cart'; ?></button>
+            <button type="submit" id="checkout-main" formaction="checkout.php" class="btn btn--primary btn--lg"><?php echo $lang['proceed_to_checkout'] ?? 'Proceed to Checkout'; ?></button>
           </div>
         </div>
 
+        <script>
+        function updateCartSubtotal() {
+            const checkboxes = document.querySelectorAll('.cart-item-checkbox');
+            const subtotalDisplay = document.getElementById('cart-total-val');
+            let total = 0;
+            let checkedCount = 0;
+            
+            checkboxes.forEach(cb => {
+                if (cb.checked) {
+                    const price = parseFloat(cb.getAttribute('data-price')) || 0;
+                    const qty = parseInt(cb.getAttribute('data-qty')) || 0;
+                    total += price * qty;
+                    checkedCount++;
+                }
+            });
+            
+            if (subtotalDisplay) {
+                subtotalDisplay.textContent = total.toFixed(2) + ' RON';
+            }
+            
+            const checkoutBtn = document.getElementById('checkout-main');
+            if (checkoutBtn) {
+                checkoutBtn.disabled = (checkedCount === 0);
+                checkoutBtn.style.opacity = (checkedCount === 0) ? '0.5' : '1';
+                checkoutBtn.style.cursor = (checkedCount === 0) ? 'not-allowed' : 'pointer';
+            }
+        }
+
+        document.addEventListener('change', function(e) {
+            if (e.target && e.target.classList.contains('cart-item-checkbox')) {
+                updateCartSubtotal();
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            updateCartSubtotal();
+        });
+        </script>
+
         <div class="row mt-5">
           <div class="col-12 text-end">
-            <h3 style="font-weight: 700;">Total: <span
-                style="color: #6ea622;"><?php echo number_format($total_price, 2); ?> RON</span></h3>
+            <h3 style="font-weight: 700;"><?php echo $lang['total'] ?? 'Total'; ?>: <span
+                id="cart-total-val" style="color: #6ea622;"><?php echo format_currency($total_price); ?></span></h3>
           </div>
         </div>
       </form>

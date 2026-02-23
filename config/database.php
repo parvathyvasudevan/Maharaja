@@ -1,5 +1,9 @@
-<?php
-// Database Configuration
+/**
+ * MySQLi Database Connection Configuration
+ * 
+ * Path: config/database.php
+ * Part of: Maharaja Supermarket
+ */
 
 define('DB_SERVER', getenv('DB_SERVER') ?: 'localhost');
 define('DB_USERNAME', getenv('DB_USERNAME') ?: 'root');

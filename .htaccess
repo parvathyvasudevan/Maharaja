@@ -1,12 +1,23 @@
 RewriteEngine On
+RewriteBase /Maharaja_Dev/
 
-# Allow direct access to admin and api
-RewriteRule ^(admin|api)(/.*)?$ - [L]
-
-# Serve existing files or directories directly
-RewriteCond %{REQUEST_FILENAME} -f [OR]
-RewriteCond %{REQUEST_FILENAME} -d
+# 1. Skip if it's already a real file/dir in public/
+RewriteCond %{DOCUMENT_ROOT}/Maharaja_Dev/public%{REQUEST_URI} -f [OR]
+RewriteCond %{DOCUMENT_ROOT}/Maharaja_Dev/public%{REQUEST_URI} -d
 RewriteRule ^ - [L]
 
-# Otherwise, route everything through public/
+# 2. Map search and account/login to public/shop.php and public/account/login.php
+RewriteRule ^search$ public/shop.php [QSA,L]
+RewriteRule ^account/login$ public/account/login.php [L]
+RewriteRule ^account/register$ public/account/register.php [L]
+
+# 3. Map admin/login to public/admin/login.php
+RewriteRule ^admin/login$ public/admin/login.php [L]
+
+# 4. Extensionless rules for top-level files in public/
+RewriteCond %{DOCUMENT_ROOT}/Maharaja_Dev/public/$1.php -f
+RewriteRule ^([^/.]+)$ public/$1.php [L]
+
+# 5. Route everything else through public/
+RewriteCond %{REQUEST_URI} !^/Maharaja_Dev/public/
 RewriteRule ^(.*)$ public/$1 [L]

@@ -8,7 +8,17 @@ if (file_exists($config_path_local)) {
     require_once $config_path;
 }
 
+
+// Check if customer is logged in (Disabled for guest checkout)
+/*
+if (!isset($_SESSION['customer_id'])) {
+    header("Location: /account/login.php");
+    exit;
+}
+*/
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
     $product_id = isset($_POST['product_id']) ? intval($_POST['product_id']) : null;
     $quantity = isset($_POST['quantity']) ? intval($_POST['quantity']) : 1;
     if ($quantity < 1) {
@@ -28,11 +38,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // Redirect back
-    if (isset($_SERVER['HTTP_REFERER'])) {
-        header("Location: " . $_SERVER['HTTP_REFERER']);
-    } else {
-        header("Location: index.php");
-    }
+    $referer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : 'shop.php';
+    header("Location: " . $referer);
     exit;
 }
 ?>

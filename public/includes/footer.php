@@ -56,12 +56,12 @@
 
             <div class="footer-col footer-link">
                 <div class="footer-widget">
-                    <h4>Navigation</h4>
+                    <h4><?php echo $lang['navigation']; ?></h4>
 
                     <ul>
 
                         <li>
-                            <a href="contact.php">Contact</a>
+                            <a href="contact.php"><?php echo $lang['contact_us'] ?? 'Contact'; ?></a>
                         </li>
 
                         <li>
@@ -69,7 +69,7 @@
                         </li>
 
                         <li>
-                            <a href="shop.php">All collections</a>
+                            <a href="shop.php"><?php echo $lang['all_collections']; ?></a>
                         </li>
 
                         <li>
@@ -83,16 +83,16 @@
 
             <div class="footer-col footer-link">
                 <div class="footer-widget">
-                    <h4>Information</h4>
+                    <h4><?php echo $lang['information']; ?></h4>
 
                     <ul>
 
                         <li>
-                            <a href="terms.php">Terms & Conditions</a>
+                            <a href="terms.php"><?php echo $lang['terms_conditions']; ?></a>
                         </li>
 
                         <li>
-                            <a href="privacy.php">Privacy Policy</a>
+                            <a href="privacy.php"><?php echo $lang['privacy_policy']; ?></a>
                         </li>
 
                         <li>
@@ -100,7 +100,7 @@
                         </li>
 
                         <li>
-                            <a href="refund.php">Return and Refund Policy</a>
+                            <a href="refund.php"><?php echo $lang['refund_policy']; ?></a>
                         </li>
 
                     </ul>
@@ -111,7 +111,7 @@
 
             <div class="footer-col footer-subscribe-col">
                 <div class="footer-widget">
-                    <h4>Contact</h4>
+                    <h4><?php echo $lang['contact']; ?></h4>
                     <div class="footer-store__info">
 
 
@@ -189,7 +189,7 @@
 
                         <div>
                             <a href="contact.php" class="btn btn--white btn--lg">
-                                Contact us
+                                <?php echo $lang['contact_us']; ?>
                             </a>
                         </div>
 
@@ -201,7 +201,7 @@
         <div class="footer-bottom">
             <div class="row align-items-center">
                 <div class="col-12 col-md-6">
-                    <p>Copyright © Vistula Foods 2025. All rights reserved</p>
+                    <p><?php echo $lang['copyright']; ?></p>
                 </div>
                 <div class="col-12 col-md-6">
                     <div class="supported-payment-providers">

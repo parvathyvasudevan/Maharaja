@@ -26,6 +26,7 @@ CREATE TABLE IF NOT EXISTS `customers` (
   `email` varchar(100) NOT NULL,
   `password` varchar(255) NOT NULL,
   `phone` varchar(20) DEFAULT NULL,
+  `preferred_lang` enum('en','ro') DEFAULT 'en',
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`)
@@ -36,7 +37,8 @@ CREATE TABLE IF NOT EXISTS `customers` (
 -- --------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `categories` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(100) NOT NULL,
+  `name_en` varchar(100) NOT NULL,
+  `name_ro` varchar(100) NOT NULL,
   `slug` varchar(100) NOT NULL,
   `image` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
@@ -49,8 +51,10 @@ CREATE TABLE IF NOT EXISTS `categories` (
 CREATE TABLE IF NOT EXISTS `products` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `category_id` int(11) DEFAULT NULL,
-  `title` varchar(255) NOT NULL,
-  `description` text DEFAULT NULL,
+  `title_en` varchar(255) NOT NULL,
+  `title_ro` varchar(255) NOT NULL,
+  `description_en` text DEFAULT NULL,
+  `description_ro` text DEFAULT NULL,
   `price` decimal(10,2) NOT NULL,
   `image` varchar(255) DEFAULT NULL,
   `stock` int(11) NOT NULL DEFAULT 100,
@@ -108,7 +112,7 @@ CREATE TABLE IF NOT EXISTS `orders` (
   `tax_amount` decimal(10,2) NOT NULL DEFAULT 0.00,
   `discount_amount` decimal(10,2) NOT NULL DEFAULT 0.00,
   `total_amount` decimal(10,2) NOT NULL,
-  `payment_method` enum('cod','stripe') NOT NULL DEFAULT 'cod',
+  `payment_method` enum('cod','stripe','bank_transfer') NOT NULL DEFAULT 'cod',
   `payment_status` enum('unpaid','paid','failed','refunded') NOT NULL DEFAULT 'unpaid',
   `status` enum('pending','processing','completed','cancelled') NOT NULL DEFAULT 'pending',
   `stripe_session_id` varchar(255) DEFAULT NULL,

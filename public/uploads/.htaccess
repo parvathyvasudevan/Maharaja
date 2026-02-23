@@ -1,0 +1,13 @@
+# Allow images/media to be served directly
+# Block execution of any PHP scripts in the uploads directory
+
+<FilesMatch "\.php$">
+    Order Deny,Allow
+    Deny from all
+</FilesMatch>
+
+# Optionally restrict to known image/media types only
+<FilesMatch "\.(jpg|jpeg|png|gif|webp|svg|mp4|pdf)$">
+    Order Allow,Deny
+    Allow from all
+</FilesMatch>
