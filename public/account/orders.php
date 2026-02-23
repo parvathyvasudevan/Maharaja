@@ -1,9 +1,5 @@
-/**
- * Customer Order History Page
- * 
- * Path: public/account/orders.php
- * Part of: Maharaja Supermarket Customer Portal
- */
+<?php
+require_once __DIR__ . '/_auth.php';
 require_customer_login();
 
 $customer_id = $_SESSION['customer_id'];

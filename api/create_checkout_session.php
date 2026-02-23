@@ -1,9 +1,5 @@
-/**
- * Stripe Checkout Session Creation Endpoint
- * 
- * Path: api/create_checkout_session.php
- * Part of: Maharaja Supermarket API
- */
+<?php
+session_start();
 require_once __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/../config/app.php';
 require_once __DIR__ . '/stripe_helpers.php';

@@ -1,9 +1,4 @@
-/**
- * Application Configuration
- * 
- * Path: config/app.php
- * Part of: Maharaja Supermarket
- */
+<?php
 
 define('APP_URL', getenv('APP_URL') ?: 'http://localhost');
 define('APP_CURRENCY', getenv('APP_CURRENCY') ?: 'ron');

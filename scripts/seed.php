@@ -1,9 +1,6 @@
-/**
- * Database Seeding Utility
- * 
- * Path: scripts/seed.php
- * Part of: Maharaja Supermarket System Utilities
- */
+<?php
+// scripts/seed.php
+// Script to apply seed data to the database
 
 require_once __DIR__ . '/../includes/db.php';
 

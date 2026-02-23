@@ -1,9 +1,5 @@
-/**
- * Product Details Page
- * 
- * Path: public/product.php
- * Part of: Maharaja Supermarket
- */
+<?php
+// public/product.php
 require_once __DIR__ . '/../includes/init_lang.php';
 require_once __DIR__ . '/../includes/db.php';
 require_once __DIR__ . '/../includes/helpers.php';

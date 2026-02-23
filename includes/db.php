@@ -1,9 +1,4 @@
-/**
- * Central Database Entrypoint
- * 
- * Path: includes/db.php
- * Part of: Maharaja Supermarket
- */
+<?php
 
 require_once __DIR__ . '/../config/pdo.php';
 

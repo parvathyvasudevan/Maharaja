@@ -1,9 +1,5 @@
-/**
- * Admin Product Management Listing
- * 
- * Path: public/admin/products.php
- * Part of: Maharaja Supermarket Administration
- */
+<?php
+require_once __DIR__ . '/auth_check.php';
 require_admin_login();
 
 // Database Connection

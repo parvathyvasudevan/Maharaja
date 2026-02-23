@@ -1,9 +1,6 @@
-/**
- * Database Setup and Migration Utility
- * 
- * Path: scripts/setup_db.php
- * Part of: Maharaja Supermarket System Utilities
- */
+<?php
+// scripts/setup_db.php
+// Robust script to apply migrations (adding bilingual columns) and seed data
 
 require_once __DIR__ . '/../includes/db.php';
 

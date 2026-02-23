@@ -1,9 +1,4 @@
-/**
- * PDO Database Connection Configuration
- * 
- * Path: config/pdo.php
- * Part of: Maharaja Supermarket
- */
+<?php
 
 $host = 'localhost';
 $db   = 'maharaja_db';

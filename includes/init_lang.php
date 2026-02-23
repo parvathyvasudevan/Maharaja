@@ -1,9 +1,4 @@
-/**
- * Language and Session Initialization
- * 
- * Path: includes/init_lang.php
- * Part of: Maharaja Supermarket
- */
+<?php
 
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
@@ -31,12 +26,6 @@ if (file_exists($lang_file)) {
     $lang = []; 
 }
 
-/**
- * Helper function to get correct column for bilingual database content
- * 
- * @param string $base_name Basic column name (e.g., 'title')
- * @return string Language-suffixed column name (e.g., 'title_en')
- */
 function get_col($base_name) {
     $current_lang = $_SESSION['lang'] ?? 'en';
     return $base_name . '_' . $current_lang;
