@@ -1,5 +1,16 @@
 FROM php:8.2-apache
 
+# Set DocumentRoot to public
+ENV APACHE_DOCUMENT_ROOT /var/www/html/public
+RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
+RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
+
+# Grant permissions and enable .htaccess
+RUN echo '<Directory /var/www/html/public>\n\
+    Options Indexes FollowSymLinks\n\
+    AllowOverride All\n\
+    Require all granted\n\</Directory>' >> /etc/apache2/apache2.conf
+
 COPY . /var/www/html/
 
 RUN docker-php-ext-install mysqli pdo pdo_mysql && a2enmod rewrite

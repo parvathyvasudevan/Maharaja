@@ -1,6 +1,6 @@
 <?php
-require_once __DIR__ . '/../config/database.php';
-require_once __DIR__ . '/../config/stripe.php';
+require_once __DIR__ . '/../../config/database.php';
+require_once __DIR__ . '/../../config/stripe.php';
 require_once __DIR__ . '/stripe_helpers.php';
 
 $payload = file_get_contents('php://input');

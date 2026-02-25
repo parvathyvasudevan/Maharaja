@@ -1,7 +1,7 @@
 <?php
 session_start();
-require_once __DIR__ . '/../config/database.php';
-require_once __DIR__ . '/../config/app.php';
+require_once __DIR__ . '/../../config/database.php';
+require_once __DIR__ . '/../../config/app.php';
 require_once __DIR__ . '/stripe_helpers.php';
 
 if (!isset($_SESSION['cart']) || empty($_SESSION['cart'])) {

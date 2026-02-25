@@ -1,6 +1,6 @@
 <?php
-require_once __DIR__ . '/../config/app.php';
-require_once __DIR__ . '/../config/stripe.php';
+require_once __DIR__ . '/../../config/app.php';
+require_once __DIR__ . '/../../config/stripe.php';
 
 function stripe_api_request($method, $endpoint, $params)
 {
