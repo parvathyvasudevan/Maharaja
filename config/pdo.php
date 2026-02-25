@@ -1,6 +1,6 @@
 <?php
 
-$host = getenv('DB_SERVER') ?: 'localhost';
+$host = getenv('DB_SERVER') ?: '127.0.0.1';
 $db   = getenv('DB_NAME') ?: 'maharaja_db';
 $user = getenv('DB_USERNAME') ?: 'root';
 $pass = getenv('DB_PASSWORD') ?: '';
