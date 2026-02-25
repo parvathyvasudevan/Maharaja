@@ -18,7 +18,8 @@ try {
     $conn = $link; // For compatibility
     mysqli_set_charset($link, 'utf8mb4');
 } catch (Exception $e) {
-    // If the error is 'No such host', it's likely a DNS issue or typo in the fallback host
-    die("ERROR: Could not connect to database. " . $e->getMessage());
+    // Prevent fatal crash, just log/handle the error
+    error_log("Database connection error: " . $e->getMessage());
+    $db_connection_error = $e->getMessage();
 }
 ?>
