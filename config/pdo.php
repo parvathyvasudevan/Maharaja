@@ -17,6 +17,13 @@ $options = [
 try {
      $pdo = new PDO($dsn, $user, $pass, $options);
 } catch (\PDOException $e) {
-     throw new \PDOException($e->getMessage(), (int)$e->getCode());
+     if (getenv('RENDER')) {
+         error_log("PDO Connection Error: " . $e->getMessage());
+         // We don't die here because some pages might only use mysqli,
+         // but we ensuring $pdo is null to prevent fatal errors.
+         $pdo = null;
+     } else {
+         throw new \PDOException($e->getMessage(), (int)$e->getCode());
+     }
 }
 ?>

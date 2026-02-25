@@ -6,6 +6,9 @@ $password = "";
 $database = "maharaja_db";
 $port = 3306;
 
+$conn = null;
+$link = null;
+
 try {
     mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
     $conn = new mysqli($host, $user, $password, $database, $port);
@@ -13,7 +16,8 @@ try {
 } catch (Exception $e) {
     $conn = (object)[
         'connect_error' => $e->getMessage(),
-        'error' => $e->getMessage()
+        'error' => $e->getMessage(),
+        'host_info' => 'Disconnected'
     ];
 }
 ?>
