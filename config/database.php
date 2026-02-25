@@ -1,10 +1,10 @@
 <?php
-// Database configuration - Use Environment Variables first, then Clever Cloud fallback
-$host = getenv('DB_SERVER') ?: "buzhj6ro7wqspxvahnlg-mysql.services.clever-cloud.com";
-$user = getenv('DB_USERNAME') ?: "u7bqftk5wsk8uzhc";
-$password = getenv('DB_PASSWORD') ?: "VWClCAcZKzlSib9dArbN";
-$database = getenv('DB_NAME') ?: "buzhj6ro7wqspxvahnlg";
-$port = getenv('DB_PORT') ?: 3306; // Reverted to 3306 as requested
+// Database configuration - Use Environment Variables first, then Local fallback
+$host = getenv('DB_SERVER') ?: "localhost";
+$user = getenv('DB_USERNAME') ?: "root";
+$password = getenv('DB_PASSWORD') ?: "";
+$database = getenv('DB_NAME') ?: "maharaja_db";
+$port = getenv('DB_PORT') ?: 3306;
 
 define('DB_SERVER', $host);
 define('DB_USERNAME', $user);
