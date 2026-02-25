@@ -37,6 +37,13 @@ if (!$link) {
             <h3 style="margin-top: 0;">🚧 Database Connection Issue</h3>
             <p>The application could not connect to the database. This is usually due to missing or incorrect Environment Variables.</p>
             <p><strong>Error:</strong> <?php echo htmlspecialchars($db_connection_error ?: mysqli_connect_error()); ?></p>
+            
+            <?php if ($host === 'localhost' || $host === '127.0.0.1'): ?>
+            <div style="background: #fffbeb; border: 1px solid #fef3c7; color: #92400e; padding: 12px; border-radius: 4px; margin: 15px 0;">
+                ⚠️ <strong>Note:</strong> Your Host is currently set to <code>localhost</code>. This only works on your own computer. On Render, you must use the <strong>Host</strong> address from your Clever Cloud dashboard.
+            </div>
+            <?php endif; ?>
+
             <hr style="border: 0; border-top: 1px solid #fecaca; margin: 15px 0;">
             <p><strong>Action Required:</strong> Go to your <strong>Render Dashboard</strong> > <strong>Environment Variables</strong> and ensure the following are set:</p>
             <ul style="margin-bottom: 0;">
