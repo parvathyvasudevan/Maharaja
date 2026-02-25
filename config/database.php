@@ -1,10 +1,10 @@
 <?php
-// Database configuration - Use Environment Variables first, then Local fallback
-$host = getenv('DB_SERVER') ?: "localhost";
-$user = getenv('DB_USERNAME') ?: "root";
-$password = getenv('DB_PASSWORD') ?: "";
-$database = getenv('DB_NAME') ?: "maharaja_db";
-$port = getenv('DB_PORT') ?: 3306;
+// Database configuration - Support both custom and native Clever Cloud keys
+$host = getenv('DB_SERVER') ?: getenv('MYSQL_ADDON_HOST') ?: "localhost";
+$user = getenv('DB_USERNAME') ?: getenv('MYSQL_ADDON_USER') ?: "root";
+$password = getenv('DB_PASSWORD') ?: getenv('MYSQL_ADDON_PASSWORD') ?: "";
+$database = getenv('DB_NAME') ?: getenv('MYSQL_ADDON_DB') ?: "maharaja_db";
+$port = getenv('DB_PORT') ?: getenv('MYSQL_ADDON_PORT') ?: 3306;
 
 define('DB_SERVER', $host);
 define('DB_USERNAME', $user);

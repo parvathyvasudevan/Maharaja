@@ -1,10 +1,10 @@
 <?php
-// PDO configuration - Use Environment Variables first, then Local fallback
-$host = getenv('DB_SERVER') ?: "localhost";
-$db   = getenv('DB_NAME') ?: "maharaja_db";
-$user = getenv('DB_USERNAME') ?: "root";
-$pass = getenv('DB_PASSWORD') ?: "";
-$port = getenv('DB_PORT') ?: 3306;
+// PDO configuration - Support both custom and native Clever Cloud keys
+$host = getenv('DB_SERVER') ?: getenv('MYSQL_ADDON_HOST') ?: "localhost";
+$db   = getenv('DB_NAME') ?: getenv('MYSQL_ADDON_DB') ?: "maharaja_db";
+$user = getenv('DB_USERNAME') ?: getenv('MYSQL_ADDON_USER') ?: "root";
+$pass = getenv('DB_PASSWORD') ?: getenv('MYSQL_ADDON_PASSWORD') ?: "";
+$port = getenv('DB_PORT') ?: getenv('MYSQL_ADDON_PORT') ?: 3306;
 $charset = 'utf8mb4';
 
 $dsn = "mysql:host=$host;dbname=$db;port=$port;charset=$charset";
