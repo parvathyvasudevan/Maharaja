@@ -21,6 +21,7 @@ if (!isset($link)) {
     require_once __DIR__ . '/../config/database.php';
   }
 }
+?>
 
 <style>
 /* Fix for selective checkout checkboxes being hidden by global CSS */
@@ -133,6 +134,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 
+<?php
 // Calculate Cart Items and Subtotal
 $total_cart_items = 0;
 $header_cart_subtotal = 0;
