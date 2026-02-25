@@ -22,15 +22,27 @@ if (!isset($link)) {
   }
 }
 
-// Calculate Cart Items and Subtotal
-$total_cart_items = 0;
-$header_cart_subtotal = 0;
-$header_cart_details = [];
-
-if (isset($_SESSION['cart']) && is_array($_SESSION['cart']) && !empty($_SESSION['cart'])) {
-  $total_cart_items = !empty($_SESSION['cart']) ? array_sum($_SESSION['cart']) : 0;
-?>
 <style>
+/* Fix for selective checkout checkboxes being hidden by global CSS */
+input[type="checkbox"].cart-item-checkbox, 
+.mini-cart-selection input[type="checkbox"] {
+    -webkit-appearance: checkbox !important;
+    -moz-appearance: checkbox !important;
+    appearance: checkbox !important;
+    width: 20px !important;
+    height: 20px !important;
+    cursor: pointer;
+    vertical-align: middle;
+    accent-color: #6ea622; /* Matches theme green */
+    position: relative;
+    z-index: 5;
+    margin: 0;
+}
+.mini-cart-selection {
+    display: flex;
+    align-items: center;
+    padding-right: 12px;
+}
 /* Enhanced Profile Dropdown */
 .header-sign-in-up__group {
     position: relative;
@@ -120,6 +132,15 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 </script>
+
+// Calculate Cart Items and Subtotal
+$total_cart_items = 0;
+$header_cart_subtotal = 0;
+$header_cart_details = [];
+
+if (isset($_SESSION['cart']) && is_array($_SESSION['cart']) && !empty($_SESSION['cart'])) {
+  $total_cart_items = !empty($_SESSION['cart']) ? array_sum($_SESSION['cart']) : 0;
+?>
 <?php
   $ids = array_keys($_SESSION['cart']);
   $placeholders = str_repeat('?,', count($ids) - 1) . '?';
