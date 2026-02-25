@@ -5,10 +5,14 @@ $password = "VWClCAcZKzlSib9dArbN";
 $database = "buzhj6ro7wqspxvahnlg";
 $port = 3306;
 
-$conn = new mysqli($host, $user, $password, $database, $port);
-
-if ($conn->connect_error) {
-    die("DB connection failed: " . $conn->connect_error);
+try {
+    mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+    $conn = new mysqli($host, $user, $password, $database, $port);
+    $link = $conn; 
+} catch (Exception $e) {
+    $conn = (object)[
+        'connect_error' => $e->getMessage(),
+        'error' => $e->getMessage()
+    ];
 }
-$link = $conn; 
 ?>
