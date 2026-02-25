@@ -1,9 +1,9 @@
 RewriteEngine On
-RewriteBase /Maharaja_Dev/
+RewriteBase /
 
 # 1. Skip if it's already a real file/dir in public/
-RewriteCond %{DOCUMENT_ROOT}/Maharaja_Dev/public%{REQUEST_URI} -f [OR]
-RewriteCond %{DOCUMENT_ROOT}/Maharaja_Dev/public%{REQUEST_URI} -d
+RewriteCond %{DOCUMENT_ROOT}/public%{REQUEST_URI} -f [OR]
+RewriteCond %{DOCUMENT_ROOT}/public%{REQUEST_URI} -d
 RewriteRule ^ - [L]
 
 # 2. Map search and account/login to public/shop.php and public/account/login.php
@@ -15,9 +15,9 @@ RewriteRule ^account/register$ public/account/register.php [L]
 RewriteRule ^admin/login$ public/admin/login.php [L]
 
 # 4. Extensionless rules for top-level files in public/
-RewriteCond %{DOCUMENT_ROOT}/Maharaja_Dev/public/$1.php -f
+RewriteCond %{DOCUMENT_ROOT}/public/$1.php -f
 RewriteRule ^([^/.]+)$ public/$1.php [L]
 
 # 5. Route everything else through public/
-RewriteCond %{REQUEST_URI} !^/Maharaja_Dev/public/
+RewriteCond %{REQUEST_URI} !^/public/
 RewriteRule ^(.*)$ public/$1 [L]

@@ -1,9 +1,9 @@
 <?php
 
-$host = 'localhost';
-$db   = 'maharaja_db';
-$user = 'root';
-$pass = '';
+$host = getenv('DB_SERVER') ?: 'localhost';
+$db   = getenv('DB_NAME') ?: 'maharaja_db';
+$user = getenv('DB_USERNAME') ?: 'root';
+$pass = getenv('DB_PASSWORD') ?: '';
 $charset = 'utf8mb4';
 
 $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
