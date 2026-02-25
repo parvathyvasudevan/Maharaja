@@ -1,14 +1,20 @@
 <?php
+$host = "buzhj6ro7wqspxvahnlg-mysql.services.clever-cloud.com";
+$user = "u7bqftk5wsk8uzhc";
+$password = "VWClCAcZKzlSib9dArbN";
+$database = "buzhj6ro7wqspxvahnlg";
+$port = 3306;
 
-define('DB_SERVER', getenv('DB_SERVER') ?: '127.0.0.1');
-define('DB_USERNAME', getenv('DB_USERNAME') ?: 'root');
-define('DB_PASSWORD', getenv('DB_PASSWORD') ?: '');
-define('DB_NAME', getenv('DB_NAME') ?: 'maharaja_db');
+define('DB_SERVER', $host);
+define('DB_USERNAME', $user);
+define('DB_PASSWORD', $password);
+define('DB_NAME', $database);
 
 /* Attempt to connect to MySQL database */
 try {
     mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
-    $link = mysqli_connect(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_NAME);
+    $link = mysqli_connect($host, $user, $password, $database, $port);
+    $conn = $link; // For compatibility
     mysqli_set_charset($link, 'utf8mb4');
 } catch (Exception $e) {
     die("ERROR: Could not connect. " . $e->getMessage());
