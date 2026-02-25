@@ -59,6 +59,6 @@ if (!$link) {
         // but die() is safer for preventing data-dependent crashes.
         die(); 
     }
+    }
 }
-?>
 ?>
