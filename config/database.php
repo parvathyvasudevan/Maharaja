@@ -4,7 +4,7 @@ $host = getenv('DB_SERVER') ?: "buzhj6ro7wqspxvahnlg-mysql.services.clever-cloud
 $user = getenv('DB_USERNAME') ?: "u7bqftk5wsk8uzhc";
 $password = getenv('DB_PASSWORD') ?: "VWClCAcZKzlSib9dArbN";
 $database = getenv('DB_NAME') ?: "buzhj6ro7wqspxvahnlg";
-$port = getenv('DB_PORT') ?: 3306;
+$port = getenv('DB_PORT') ?: 3386; // Corrected default port
 
 define('DB_SERVER', $host);
 define('DB_USERNAME', $user);
