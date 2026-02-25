@@ -31,93 +31,72 @@ if (isset($_SESSION['cart']) && is_array($_SESSION['cart']) && !empty($_SESSION[
   $total_cart_items = !empty($_SESSION['cart']) ? array_sum($_SESSION['cart']) : 0;
 ?>
 <style>
-/* Fix for selective checkout checkboxes being hidden by global CSS */
-input[type="checkbox"].cart-item-checkbox, 
-.mini-cart-selection input[type="checkbox"] {
-    -webkit-appearance: checkbox !important;
-    -moz-appearance: checkbox !important;
-    appearance: checkbox !important;
-    width: 20px !important;
-    height: 20px !important;
-    cursor: pointer;
-    vertical-align: middle;
-    accent-color: #6ea622; /* Matches theme green */
-    position: relative;
-    z-index: 5;
-    margin: 0;
-}
-.mini-cart-selection {
-    display: flex;
-    align-items: center;
-    padding-right: 12px;
-}
 /* Enhanced Profile Dropdown */
+.header-sign-in-up__group {
+    position: relative;
+    display: inline-block;
+}
+.header-sign-in-up__group .dropdown {
+    position: relative;
+}
 .header-sign-in-up__group .dropdown-menu {
-    border: none;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-    border-radius: 12px;
-    padding: 15px;
-    min-width: 220px;
+    display: none;
+    position: absolute !important;
+    top: 100% !important;
+    right: 0 !important;
+    left: auto !important;
+    background: #ffffff !important;
+    border: 1px solid #eaeaea !important;
+    border-radius: 12px !important;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15) !important;
+    padding: 12px 0 !important;
+    min-width: 200px !important;
+    z-index: 99999 !important;
     margin-top: 10px !important;
-    background: #fff !important;
-    z-index: 9999;
+    list-style: none !important;
+}
+.header-sign-in-up__group .dropdown-menu.show {
+    display: block !important;
 }
 .header-sign-in-up__group .dropdown-item {
-    padding: 10px 15px;
-    font-weight: 500;
-    color: #333;
-    border-radius: 8px;
-    transition: all 0.2s ease;
+    display: block !important;
+    padding: 10px 20px !important;
+    font-weight: 500 !important;
+    color: #444 !important;
+    text-decoration: none !important;
+    transition: all 0.2s ease !important;
+    font-size: 14px !important;
+    text-align: left !important;
 }
 .header-sign-in-up__group .dropdown-item:hover {
-    background-color: #f8f9fa;
-    color: #70AB22;
-    padding-left: 20px;
+    background-color: #f8f9fa !important;
+    color: #70AB22 !important;
+    padding-left: 25px !important;
 }
 .header-sign-in-up__group .dropdown-divider {
-    margin: 10px 0;
-    border-top: 1px solid #eee;
+    margin: 8px 0 !important;
+    border-top: 1px solid #eee !important;
 }
 .header-sign-in-up__group .dropdown-toggle {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 8px 16px;
-    font-weight: 600;
-    position: relative;
-    cursor: pointer;
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    cursor: pointer !important;
+    padding: 5px 0 !important;
 }
 /* Caret icon */
 .header-sign-in-up__group .dropdown-toggle::after {
     content: "";
     display: inline-block;
-    margin-left: 8px;
+    margin-left: 5px;
     vertical-align: middle;
-    border-top: 5px solid;
-    border-right: 5px solid transparent;
-    border-left: 5px solid transparent;
+    border-top: 4px solid #666;
+    border-right: 4px solid transparent;
+    border-left: 4px solid transparent;
+    transition: transform 0.2s ease;
 }
-/* No hover triggers - only show on click (Bootstrap .show class) */
-.header-sign-in-up__group .dropdown-menu {
-    display: none;
-    position: absolute;
-    right: 0;
-    left: auto;
-}
-.header-sign-in-up__group .dropdown-menu.show {
-    display: block !important;
-}
-/* Fixed placement dropdown styles - No transitions */
-.header-sign-in-up__group .dropdown-menu {
-    border: none;
-    box-shadow: 0 15px 35px rgba(0,0,0,0.2) !important;
-    border-radius: 12px;
-    padding: 20px;
-    min-width: 240px;
-    margin-top: 10px !important;
-    background: #fff !important;
-    z-index: 10001;
-    transform: none !important;
+.header-sign-in-up__group .dropdown-menu.show + .dropdown-toggle::after {
+    transform: rotate(180deg);
 }
 </style>
 <script>
@@ -2974,7 +2953,7 @@ document.addEventListener('DOMContentLoaded', function() {
                   <div class="header-sign-in-up__group">
                     <?php if (isset($_SESSION['customer_id'])): ?>
                       <div class="dropdown">
-                        <a class="dropdown-toggle" id="profileDropdown" style="color: #333; text-decoration: none; cursor: pointer; display: flex; align-items: center; gap: 8px;">
+                        <a class="dropdown-toggle" id="profileDropdown">
                           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                             class="feather feather-user">
@@ -2984,12 +2963,10 @@ document.addEventListener('DOMContentLoaded', function() {
                           <span style="font-weight: 600; font-size: 15px;">Hi, <?php echo htmlspecialchars(explode(' ', $_SESSION['customer_name'] ?? '')[0]); ?></span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
-                          <li><a class="dropdown-item" href="account/profile.php">My Profile</a></li>
-                          <li><a class="dropdown-item" href="account/orders.php">My Orders</a></li>
-                          <li>
-                            <hr class="dropdown-divider">
-                          </li>
-                          <li><a class="dropdown-item" href="account/logout.php" style="color: #dc3545;">Logout</a></li>
+                          <li><a class="dropdown-item" href="/account/profile.php">My Profile</a></li>
+                          <li><a class="dropdown-item" href="/account/orders.php">My Orders</a></li>
+                          <li><hr class="dropdown-divider"></li>
+                          <li><a class="dropdown-item" href="/account/logout.php" style="color: #dc3545 !important;">Logout</a></li>
                         </ul>
                       </div>
                     <?php else: ?>
