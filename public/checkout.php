@@ -10,6 +10,14 @@ require_once __DIR__ . '/../includes/email.php';
 const SHIPPING_FLAT_RATE = 15.00;
 const TVA_RATE = 0.09; // 9% on food
 
+// --- DEBUGGING ACCORDING TO USER REQUEST ---
+if (isset($_POST['name'])) {
+    error_reporting(E_ALL);
+    ini_set('display_errors', 1);
+    // echo "<div style='background:yellow; padding:10px; border:2px solid black;'>DEBUG: Place Order Reached! Processing...</div>";
+}
+// --- END DEBUGGING ---
+
 if (!isset($_SESSION['cart']) || empty($_SESSION['cart'])) {
     header("Location: shop.php");
     exit;
@@ -174,8 +182,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !empty($cart_items) && isset($_POST[
         header("Location: checkout_success.php?id=$order_id");
         exit;
     } catch (Exception $e) {
-        $pdo->rollBack();
-        $error = "Error placing order: " . $e->getMessage();
+        if ($pdo->inTransaction()) {
+            $pdo->rollBack();
+        }
+        $error = "<h3>❌ Error Placing Order</h3>" . $e->getMessage();
+        if (strpos($e->getMessage(), 'Unknown column') !== false) {
+            $error .= "<br><br><div class='alert alert-warning'><strong>FIX REQUIRED:</strong> It looks like your database is missing some columns. Please run this link once to fix it: <br> <a href='admin/ultra_fix.php' target='_blank' style='font-weight:bold; color:red; text-decoration:underline;'>CLICK HERE TO FIX DATABASE ON RENDER</a></div>";
+        }
     }
 }
 ?>
