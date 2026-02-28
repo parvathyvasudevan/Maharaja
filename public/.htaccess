@@ -1,5 +1,7 @@
+Options -MultiViews
 Options -Indexes
 RewriteEngine On
+RewriteBase /
 
 # ── Legacy static HTML → PHP redirects ───────────────────────────────────────
 # The site was originally a Shopify export with .html files.
@@ -13,3 +15,8 @@ Redirect 301 /terms.html   /
 
 # ── Ensure PHP files are served correctly ─────────────────────────────────────
 DirectoryIndex index.php index.html
+
+# Support extensionless URLs (e.g., /checkout -> checkout.php)
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^([^/.]+)$ $1.php [QSA,L]
