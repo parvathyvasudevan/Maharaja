@@ -1,23 +1,6 @@
 <?php
-// Local Database configuration
-$host = "localhost";
-$user = "root";
-$password = "";
-$database = "maharaja_db";
-$port = 3306;
-
-$conn = null;
-$link = null;
-
-try {
-    mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
-    $conn = new mysqli($host, $user, $password, $database, $port);
-    $link = $conn; 
-} catch (Exception $e) {
-    $conn = (object)[
-        'connect_error' => $e->getMessage(),
-        'error' => $e->getMessage(),
-        'host_info' => 'Disconnected'
-    ];
-}
+// public/db.php - Redirecting to the standardized includes/db.php
+require_once __DIR__ . '/../config/database.php';
+// This ensures that any file in public/ that does 'require db.php' 
+// uses the correct environment-based connection.
 ?>
