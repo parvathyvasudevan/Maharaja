@@ -8,15 +8,13 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 // Database Connection Check
-// This header is often included in files that already have DB connection.
-// Only connect if $link isn't set.
-if (!isset($link)) {
+// Only connect if no connection exists ($link or $pdo).
+global $link, $pdo;
+if (!isset($link) && !isset($pdo)) {
   // Try to locate database.php relative to this file (public/includes/header.php)
-  // 1. Root config (../../config/database.php)
   if (file_exists(__DIR__ . '/../../config/database.php')) {
     require_once __DIR__ . '/../../config/database.php';
   }
-  // 2. Public config (../config/database.php)
   elseif (file_exists(__DIR__ . '/../config/database.php')) {
     require_once __DIR__ . '/../config/database.php';
   }
@@ -2962,11 +2960,11 @@ if (isset($_SESSION['cart']) && is_array($_SESSION['cart']) && !empty($_SESSION[
                               . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
                   ?>
                   <div style="display:flex;align-items:center;gap:4px;font-size:13px;font-weight:700;">
-                    <a href="/lang_switch.php?lang=en&back=<?php echo urlencode($cur_url); ?>"
+                    <a href="lang_switch.php?lang=en&back=<?php echo urlencode($cur_url); ?>"
                        style="padding:4px 9px;border-radius:6px;text-decoration:none;transition:all .2s;
                               <?php echo $cur_lang==='en' ? 'background:#6ea622;color:#fff;' : 'color:#555;'; ?>">EN</a>
                     <span style="color:#ccc;">|</span>
-                    <a href="/lang_switch.php?lang=ro&back=<?php echo urlencode($cur_url); ?>"
+                    <a href="lang_switch.php?lang=ro&back=<?php echo urlencode($cur_url); ?>"
                        style="padding:4px 9px;border-radius:6px;text-decoration:none;transition:all .2s;
                               <?php echo $cur_lang==='ro' ? 'background:#6ea622;color:#fff;' : 'color:#555;'; ?>">RO</a>
                   </div>
@@ -2986,16 +2984,16 @@ if (isset($_SESSION['cart']) && is_array($_SESSION['cart']) && !empty($_SESSION[
                           <span style="font-weight: 600; font-size: 15px;">Hi, <?php echo htmlspecialchars(explode(' ', $_SESSION['customer_name'] ?? '')[0]); ?></span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
-                          <li><a class="dropdown-item" href="/account/profile.php">My Profile</a></li>
-                          <li><a class="dropdown-item" href="/account/orders.php">My Orders</a></li>
+                          <li><a class="dropdown-item" href="account/profile.php">My Profile</a></li>
+                          <li><a class="dropdown-item" href="account/orders.php">My Orders</a></li>
                           <li><hr class="dropdown-divider"></li>
-                          <li><a class="dropdown-item" href="/account/logout.php" style="color: #dc3545 !important;">Logout</a></li>
+                          <li><a class="dropdown-item" href="account/logout.php" style="color: #dc3545 !important;">Logout</a></li>
                         </ul>
                       </div>
                     <?php else: ?>
                       <div class="d-flex gap-2">
-                        <a href="/account/login.php" class="btn btn--secondary btn--sm">Sign In</a>
-                        <a href="/account/register.php" class="btn btn--primary btn--sm">Sign Up</a>
+                        <a href="account/login.php" class="btn btn--secondary btn--sm">Sign In</a>
+                        <a href="account/register.php" class="btn btn--primary btn--sm">Sign Up</a>
                       </div>
                     <?php endif; ?>
                   </div>
@@ -3049,7 +3047,7 @@ if (isset($_SESSION['cart']) && is_array($_SESSION['cart']) && !empty($_SESSION[
                         <h5 class="cart__empty-text">Your cart is empty</h5>
                       </div>
                       <div id="cart-body" class="mini-cart-has-item">
-                        <form action="checkout.php" class="mini-cart-body" method="post" id="cart">
+                        <form action="/cart.php" class="mini-cart-body" method="post" id="cart">
                           <div id="webi-main-cart-items" data-id="header">
                             <div class="js-contents">
                               <?php if (!empty($header_cart_details)): ?>
@@ -3132,7 +3130,7 @@ if (isset($_SESSION['cart']) && is_array($_SESSION['cart']) && !empty($_SESSION[
                               <div class="coupan_code">
                                 <input type="text" name="discount" placeholder="Promo Code" class="discount_coupan">
                                 <div class="apply-coupan-btn">
-                                  <a href="/checkout?discount=" class="apply btn btn--primary">Apply</a>
+                                  <a href="checkout.php?discount=" class="apply btn btn--primary">Apply</a>
                                 </div>
                               </div>
                               <div class="mini-cart-footer-total-row d-flex align-items-center justify-content-between">
@@ -3146,7 +3144,7 @@ if (isset($_SESSION['cart']) && is_array($_SESSION['cart']) && !empty($_SESSION[
                                 <button type="submit" class="cart__update-button button button--secondary"
                                   form="cart">Update</button>
                               </noscript>
-                              <button type="submit" id="checkout" class="btn btn--primary btn--arrow" name="checkout" form="cart">
+                                                            <button type="submit" id="checkout" class="btn btn--primary btn--arrow" name="checkout" form="cart" onclick="const discount = document.querySelector('.discount_coupan')?.value || ''; window.location.href='checkout.php' + (discount ? '?discount=' + encodeURIComponent(discount) : ''); return false;">
                                 Proceed to checkout
 
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
@@ -3158,7 +3156,7 @@ if (isset($_SESSION['cart']) && is_array($_SESSION['cart']) && !empty($_SESSION[
                                 </svg>
 
                               </button>
-                              <a href="cart.php" class="btn btn--secondary btn--arrow">
+                                                            <a href="cart.php" class="btn btn--secondary btn--arrow">
                                 View Cart
 
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
@@ -3176,6 +3174,25 @@ if (isset($_SESSION['cart']) && is_array($_SESSION['cart']) && !empty($_SESSION[
                       </div>
                     <script>
                     (function() {
+                        // Coupon Code Handler
+                        document.addEventListener('DOMContentLoaded', function() {
+                            const discountInput = document.querySelector('.discount_coupan');
+                            const applyBtn = document.querySelector('.apply-coupan-btn a.apply');
+                            const checkoutBtn = document.getElementById('checkout');
+                            
+                            if (discountInput) {
+                                discountInput.addEventListener('input', function() {
+                                    const code = this.value.trim();
+                                    if (applyBtn) {
+                                        applyBtn.href = 'checkout.php?discount=' + encodeURIComponent(code);
+                                    }
+                                    if (checkoutBtn) {
+                                        checkoutBtn.setAttribute('onclick', "const discount = '" + code + "'; window.location.href='checkout.php' + (discount ? '?discount=' + encodeURIComponent(discount) : ''); return false;");
+                                    }
+                                });
+                            }
+                        });
+
                         function updateMiniSubtotal() {
                             const container = document.querySelector('.cartDrawer');
                             if (!container) return;

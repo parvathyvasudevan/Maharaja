@@ -51,8 +51,53 @@ if (empty($cart_items)) {
     exit;
 }
 
+$discount_amount = 0.0;
+$coupon_id = null;
+$coupon_code = '';
+$coupon_error = '';
+
+// Check GET parameter first, then falling back to Session
+if (isset($_GET['discount']) && !empty($_GET['discount'])) {
+    $coupon_code = sanitize($_GET['discount']);
+    $_SESSION['applied_discount'] = $coupon_code; // Save to session
+} elseif (isset($_SESSION['applied_discount']) && !empty($_SESSION['applied_discount'])) {
+    $coupon_code = $_SESSION['applied_discount'];
+}
+
+if (!empty($coupon_code)) {
+    $stmt = $pdo->prepare("SELECT * FROM coupons WHERE code = ? AND is_active = 1 AND (expires_at IS NULL OR expires_at >= CURDATE())");
+    $stmt->execute([$coupon_code]);
+    $coupon = $stmt->fetch();
+
+    if ($coupon) {
+        if ($coupon['max_uses'] == 0 || $coupon['used_count'] < $coupon['max_uses']) {
+            if ($subtotal >= $coupon['min_order']) {
+                $coupon_id = $coupon['id'];
+                if ($coupon['type'] == 'percentage') {
+                    $discount_amount = ($subtotal * $coupon['value']) / 100;
+                } else {
+                    $discount_amount = $coupon['value'];
+                }
+                $discount_amount = min($discount_amount, $subtotal);
+            } else {
+                $coupon_error = "Minimum order for this coupon is " . format_currency($coupon['min_order']);
+                $coupon_code = ''; 
+                unset($_SESSION['applied_discount']); // Clear invalid
+            }
+        } else {
+            $coupon_error = "This coupon has reached its usage limit.";
+            $coupon_code = '';
+            unset($_SESSION['applied_discount']);
+        }
+    } else {
+        $coupon_error = "Invalid or expired coupon code.";
+        $coupon_code = '';
+        unset($_SESSION['applied_discount']);
+    }
+}
+
 $shipping = SHIPPING_FLAT_RATE;
-$total = $subtotal + $shipping;
+$total = $subtotal + $shipping - $discount_amount;
 
 // Handle Order Submission
 $error = '';
@@ -73,22 +118,30 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !empty($cart_items) && isset($_POST[
         $pdo->beginTransaction();
 
         // 1. Insert Order
-        $sql_order = "INSERT INTO orders (user_id, name, email, phone, address, subtotal_amount, shipping_cost, tax_amount, total_amount, status, payment_method, created_at) 
-                      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending', ?, NOW())";
+        $sql_order = "INSERT INTO orders (user_id, coupon_id, name, email, phone, address, subtotal_amount, shipping_cost, discount_amount, tax_amount, total_amount, status, payment_method, created_at) 
+                      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending', ?, NOW())";
         $stmt_order = $pdo->prepare($sql_order);
         $stmt_order->execute([
             $user_id, 
+            $coupon_id,
             $name, 
             $email, 
             $phone, 
             $address, 
             $subtotal, 
             $shipping, 
-            calculate_tva($subtotal), 
+            $discount_amount,
+            calculate_tva($subtotal - $discount_amount), 
             $total, 
             $payment_method
         ]);
         $order_id = $pdo->lastInsertId();
+
+        // 1.5 Increment Coupon Use
+        if ($coupon_id) {
+            $pdo->prepare("UPDATE coupons SET used_count = used_count + 1 WHERE id = ?")->execute([$coupon_id]);
+        }
+
 
         // 2. Insert Order Items
         $sql_item = "INSERT INTO order_items (order_id, product_id, quantity, price) VALUES (?, ?, ?, ?)";
@@ -140,8 +193,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !empty($cart_items) && isset($_POST[
             <p style="margin-bottom: 30px; color: #666;">Please login or register to complete your order.</p>
 
             <div class="d-grid gap-3" style="display: flex; flex-direction: column; gap: 15px;">
-              <a href="login.php?redirect=checkout.php" class="btn btn--primary btn--lg">Login</a>
-              <a href="register.php?redirect=checkout.php" class="btn btn--secondary btn--lg">Create Account</a>
+              <a href="account/login.php?redirect=checkout.php" class="btn btn--primary btn--lg">Login</a>
+              <a href="account/register.php?redirect=checkout.php" class="btn btn--secondary btn--lg">Create Account</a>
 
               <div style="position: relative; margin: 20px 0;">
                 <hr style="border: 0; border-top: 1px solid #eee;">
@@ -156,6 +209,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !empty($cart_items) && isset($_POST[
     <?php else: ?>
       <?php if ($error): ?>
         <div class="alert alert-danger"><?php echo $error; ?></div>
+      <?php endif; ?>
+      <?php if ($coupon_error): ?>
+        <div class="alert alert-warning"><?php echo $coupon_error; ?></div>
       <?php endif; ?>
 
       <div class="row">
@@ -281,8 +337,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !empty($cart_items) && isset($_POST[
                 </tr>
                 <tr>
                     <td style="font-size: 14px; color: #888;"><?php echo $lang['tva'] ?? 'Included TVA (9%)'; ?></td>
-                    <td class="text-end" style="font-size: 14px; color: #888;"><?php echo format_currency(calculate_tva($subtotal)); ?></td>
+                    <td class="text-end" style="font-size: 14px; color: #888;"><?php echo format_currency(calculate_tva($subtotal - $discount_amount)); ?></td>
                 </tr>
+                <?php if ($discount_amount > 0): ?>
+                <tr>
+                  <td><?php echo $lang['discount'] ?? 'Discount'; ?> (<?php echo htmlspecialchars($coupon_code); ?>)</td>
+                  <td class="text-end" style="color: #e44d26;">-<?php echo format_currency($discount_amount); ?></td>
+                </tr>
+                <?php endif; ?>
                 <tr style="font-weight: 700; font-size: 18px;">
                   <td><?php echo $lang['total'] ?? 'Total'; ?></td>
                   <td class="text-end"><?php echo format_currency($total); ?></td>
