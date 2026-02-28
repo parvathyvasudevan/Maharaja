@@ -59,7 +59,7 @@ function require_admin_login(): void {
 
 // ── Input sanitization helpers ────────────────────────────────────────────────
 function clean(string $val): string {
-    return htmlspecialchars(strip_tags(trim($val)), ENT_QUOTES, 'UTF-8');
+    return strip_tags(trim($val));
 }
 
 function clean_int(mixed $val): int {
