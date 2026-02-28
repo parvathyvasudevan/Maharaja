@@ -11,9 +11,13 @@ $pass = getenv('DB_PASSWORD') ?: getenv('MYSQL_ADDON_PASSWORD') ?: "";
 $port = getenv('DB_PORT') ?: getenv('MYSQL_ADDON_PORT') ?: 3306;
 
 echo "<h2>Database Ultra-Fix Utility (Comprehensive)</h2><hr>";
-echo "Connecting to: $host ($db)...<br>";
-
 $conn = mysqli_connect($host, $user, $pass, $db, (int)$port);
+
+echo "<strong>Connection Check:</strong><br>";
+echo "Host: " . htmlspecialchars($host) . "<br>";
+echo "User: " . htmlspecialchars($user) . "<br>";
+echo "Database: " . htmlspecialchars($db) . "<br>";
+echo "Port: " . htmlspecialchars($port) . "<br>";
 
 if (!$conn) {
     die("<span style='color:red;'>Connection failed: " . mysqli_connect_error() . "</span>");

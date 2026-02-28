@@ -185,7 +185,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !empty($cart_items) && isset($_POST[
         if ($pdo->inTransaction()) {
             $pdo->rollBack();
         }
-        $error = "<h3>❌ Error Placing Order</h3>" . $e->getMessage();
+        
+        // Connection Info for Debugging
+        $db_info = " [Host: " . htmlspecialchars(getenv('DB_SERVER') ?: getenv('MYSQL_ADDON_HOST') ?: 'unknown') . 
+                   ", DB: " . htmlspecialchars(getenv('DB_NAME') ?: getenv('MYSQL_ADDON_DB') ?: 'unknown') . "]";
+        
+        $error = "<h3>❌ Error Placing Order</h3>" . $e->getMessage() . "<br><small style='color:gray;'>" . $db_info . "</small>";
         if (strpos($e->getMessage(), 'Unknown column') !== false) {
             $error .= "<br><br><div class='alert alert-warning'><strong>FIX REQUIRED:</strong> It looks like your database is missing some columns. Please run this link once to fix it: <br> <a href='admin/ultra_fix.php' target='_blank' style='font-weight:bold; color:red; text-decoration:underline;'>CLICK HERE TO FIX DATABASE ON RENDER</a></div>";
         }
