@@ -17,11 +17,14 @@ $conn = null;
 $db_connection_error = null;
 
 try {
-    mysqli_report(MYSQLI_REPORT_OFF); // Turn off strict reporting to handle errors manually if needed
-    $link = mysqli_connect($host, $user, $password, $database, (int)$port);
-    $conn = $link; // For compatibility
-    if ($link) {
-        mysqli_set_charset($link, 'utf8mb4');
+    mysqli_report(MYSQLI_REPORT_OFF);
+    // Optimization: Only connect if $link hasn't been established yet
+    if (!isset($link) || $link === null) {
+        $link = mysqli_connect($host, $user, $password, $database, (int)$port);
+        $conn = $link; // For compatibility
+        if ($link) {
+            mysqli_set_charset($link, 'utf8mb4');
+        }
     }
 } catch (Exception $e) {
     $db_connection_error = $e->getMessage();
@@ -60,4 +63,10 @@ if (!$link) {
         die(); 
     }
 }
-?>
+
+// Explicitly close connection on shutdown to free up resources as quickly as possible
+register_shutdown_function(function() use (&$link) {
+    if ($link) {
+        mysqli_close($link);
+    }
+});

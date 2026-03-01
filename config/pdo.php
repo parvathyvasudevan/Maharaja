@@ -26,4 +26,10 @@ try {
          throw new \PDOException($e->getMessage(), (int)$e->getCode());
      }
 }
-?>
+
+// Explicitly close connection on shutdown to free up resources as quickly as possible
+register_shutdown_function(function() use (&$pdo) {
+    if ($pdo) {
+        $pdo = null;
+    }
+});

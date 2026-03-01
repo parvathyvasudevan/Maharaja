@@ -29,4 +29,3 @@ function csrf_field() {
     $token = generate_csrf_token();
     return '<input type="hidden" name="csrf_token" value="' . $token . '">';
 }
-?>

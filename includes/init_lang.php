@@ -30,4 +30,3 @@ function get_col($base_name) {
     $current_lang = $_SESSION['lang'] ?? 'en';
     return $base_name . '_' . $current_lang;
 }
-?>
